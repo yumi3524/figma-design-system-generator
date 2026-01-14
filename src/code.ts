@@ -1,8 +1,8 @@
 /// <reference types="@figma/plugin-typings" />
 
 /**
- * Fujioka Shinkyuu Design System Plugin
- * 藤岡鍼灸治療院 デザインシステム自動生成プラグイン
+ * Figma Design System Generator Plugin
+ * デザインシステム自動生成プラグイン
  */
 
 import { COLORS } from './constants/colors';
@@ -10,10 +10,11 @@ import { SPACING } from './constants/spacing';
 import { TYPOGRAPHY, BORDER_RADIUS } from './constants/typography';
 import { TEXT_STYLES } from './constants/text-styles';
 import { getExistingCollection, getExistingVariable, getExistingTextStyle } from './utils/helpers';
+import { createDesignSystemDocumentation } from './generators/frame-generator';
 
 async function main() {
   console.log("========================================");
-  console.log("藤岡鍼灸治療院 Design System Generator");
+  console.log("Design System Generator");
   console.log("========================================\n");
 
   try {
@@ -204,6 +205,20 @@ async function main() {
     }
 
     // ----------------------------------------
+    // Step 9: Create Design System Documentation Frames
+    // ----------------------------------------
+    console.log("\n9. Creating design system documentation frames...");
+    var docFrame = await createDesignSystemDocumentation();
+
+    // 現在のページに配置
+    figma.currentPage.appendChild(docFrame);
+
+    // ビューポートをフレームに移動
+    figma.viewport.scrollAndZoomIntoView([docFrame]);
+
+    console.log("   Created: Design System documentation frame");
+
+    // ----------------------------------------
     // Complete!
     // ----------------------------------------
     console.log("\n========================================");
@@ -217,8 +232,9 @@ async function main() {
     console.log(`  - ${BORDER_RADIUS.length} Border radius variables`);
     console.log(`  - ${TEXT_STYLES.length} Text styles`);
     console.log(`  - 2 Modes: Light & Dark`);
+    console.log(`  - 1 Documentation frame with visual samples`);
 
-    figma.closePlugin("Design System generated successfully! Check the Variables panel.");
+    figma.closePlugin("Design System generated successfully! Check the Variables panel and the new documentation frame.");
 
   } catch (error) {
     console.error("Error:", error);

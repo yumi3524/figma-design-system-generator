@@ -1,7 +1,8 @@
 {
-  "name": "fujioka-shinkyuu-design-system",
+  "name": "figma-design-system-generator",
   "version": "1.0.0",
-  "description": "Figma plugin for Fujioka Shinkyuu design system",
+  "description": "Configurable Figma plugin for design system generation",
+  "main": "code.js",
   "scripts": {
     "build": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015",
     "watch": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015 --watch"
@@ -16,6 +17,6 @@
     "plugin",
     "design-system"
   ],
-  "author": "Fujioka Shinkyuu",
+  "author": "Yumiko Fujiwara",
   "license": "MIT"
 }
