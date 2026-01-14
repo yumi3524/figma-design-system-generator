@@ -1,6 +1,6 @@
 /**
- * Spacing Definitions - 8pxベーススケール
- * 藤岡鍼灸治療院デザインシステム
+ * スペーシング定義 - 8pxベーススケール
+ * デザインシステムのスペーシング値をカスタマイズ
  */
 
 export interface NumberDefinition {
@@ -8,6 +8,10 @@ export interface NumberDefinition {
   value: number;
 }
 
+/**
+ * スペーシングスケール
+ * 8pxを基準としたスケール
+ */
 export const SPACING: NumberDefinition[] = [
   { name: "space-1", value: 4 },
   { name: "space-2", value: 8 },

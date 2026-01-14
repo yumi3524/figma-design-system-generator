@@ -1,10 +1,13 @@
 /**
- * Typography Definitions - フォントサイズスケール
- * 藤岡鍼灸治療院デザインシステム
+ * タイポグラフィ定義 - フォントサイズスケール
+ * デザインシステムのタイポグラフィをカスタマイズ
  */
 
 import { NumberDefinition } from './spacing';
 
+/**
+ * タイポグラフィスケール
+ */
 export const TYPOGRAPHY: NumberDefinition[] = [
   { name: "text-xs", value: 12 },
   { name: "text-sm", value: 14 },
@@ -17,6 +20,9 @@ export const TYPOGRAPHY: NumberDefinition[] = [
   { name: "text-5xl", value: 48 }
 ];
 
+/**
+ * 角丸スケール
+ */
 export const BORDER_RADIUS: NumberDefinition[] = [
   { name: "radius-none", value: 0 },
   { name: "radius-sm", value: 4 },

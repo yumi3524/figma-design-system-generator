@@ -1,130 +1,130 @@
 /// <reference types="@figma/plugin-typings" />
 
 /**
- * Color Definitions - Generic Color Palette
+ * カラー定義 - 汎用カラーパレット
  * 
- * Customize this file for your design system.
- * Each color requires both light and dark mode values.
+ * デザインシステムに合わせてこのファイルをカスタマイズしてください。
+ * 各カラーはLightモードとDarkモードの両方の値が必要です。
  */
 
 export interface ColorDefinition {
   name: string;
-  label: string;  // Human-readable label
+  label: string;  // 人間が読める形のラベル
   light: { r: number; g: number; b: number; a: number };
   dark: { r: number; g: number; b: number; a: number };
 }
 
 /**
- * Color Palette
+ * カラーパレット
  * 
- * Edit these values to match your brand colors.
- * RGB values range from 0.0 to 1.0
+ * ブランドカラーに合わせてこれらの値を編集してください。
+ * RGB値は 0.0 から 1.0 の範囲です
  */
 export const COLORS: ColorDefinition[] = [
-  // Primary Colors
+  // プライマリーカラー
   {
     name: "primary",
-    label: "Primary Blue",
+    label: "プライマリーブルー",
     light: { r: 0.2, g: 0.4, b: 0.8, a: 1 },
     dark: { r: 0.4, g: 0.6, b: 1, a: 1 }
   },
   {
     name: "primary-light",
-    label: "Light Blue",
+    label: "ライトブルー",
     light: { r: 0.4, g: 0.6, b: 0.9, a: 1 },
     dark: { r: 0.5, g: 0.7, b: 1, a: 1 }
   },
   {
     name: "primary-dark",
-    label: "Dark Blue",
+    label: "ダークブルー",
     light: { r: 0.1, g: 0.2, b: 0.6, a: 1 },
     dark: { r: 0.3, g: 0.5, b: 0.9, a: 1 }
   },
 
-  // Accent Colors
+  // アクセントカラー
   {
     name: "accent",
-    label: "Accent Orange",
+    label: "アクセントオレンジ",
     light: { r: 0.9, g: 0.5, b: 0.2, a: 1 },
     dark: { r: 1, g: 0.6, b: 0.3, a: 1 }
   },
 
-  // Background Colors
+  // 背景カラー
   {
     name: "bg-primary",
-    label: "Background Primary",
+    label: "背景プライマリー",
     light: { r: 1, g: 1, b: 1, a: 1 },
     dark: { r: 0.1, g: 0.1, b: 0.1, a: 1 }
   },
   {
     name: "bg-surface",
-    label: "Surface Background",
+    label: "サーフェス背景",
     light: { r: 0.98, g: 0.98, b: 0.98, a: 1 },
     dark: { r: 0.15, g: 0.15, b: 0.15, a: 1 }
   },
   {
     name: "bg-elevated",
-    label: "Elevated Background",
+    label: "浮き上がり背景",
     light: { r: 0.96, g: 0.96, b: 0.96, a: 1 },
     dark: { r: 0.2, g: 0.2, b: 0.2, a: 1 }
   },
 
-  // Border Colors
+  // ボーダーカラー
   {
     name: "border-default",
-    label: "Default Border",
+    label: "デフォルトボーダー",
     light: { r: 0.9, g: 0.9, b: 0.9, a: 1 },
     dark: { r: 0.25, g: 0.25, b: 0.25, a: 1 }
   },
   {
     name: "border-subtle",
-    label: "Subtle Border",
+    label: "サブトルボーダー",
     light: { r: 0.93, g: 0.93, b: 0.93, a: 1 },
     dark: { r: 0.18, g: 0.18, b: 0.18, a: 1 }
   },
 
-  // Text Colors
+  // テキストカラー
   {
     name: "text-primary",
-    label: "Primary Text",
+    label: "プライマリーテキスト",
     light: { r: 0.15, g: 0.15, b: 0.15, a: 1 },
     dark: { r: 0.95, g: 0.95, b: 0.95, a: 1 }
   },
   {
     name: "text-secondary",
-    label: "Secondary Text",
+    label: "セカンダリーテキスト",
     light: { r: 0.45, g: 0.45, b: 0.45, a: 1 },
     dark: { r: 0.7, g: 0.7, b: 0.7, a: 1 }
   },
   {
     name: "text-muted",
-    label: "Muted Text",
+    label: "ミュートテキスト",
     light: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
     dark: { r: 0.5, g: 0.5, b: 0.5, a: 1 }
   },
   {
     name: "text-on-accent",
-    label: "Text on Accent",
+    label: "アクセント上のテキスト",
     light: { r: 1, g: 1, b: 1, a: 1 },
     dark: { r: 1, g: 1, b: 1, a: 1 }
   },
 
-  // Semantic Colors
+  // セマンティックカラー
   {
     name: "success",
-    label: "Success Green",
+    label: "成功グリーン",
     light: { r: 0.2, g: 0.6, b: 0.3, a: 1 },
     dark: { r: 0.3, g: 0.7, b: 0.4, a: 1 }
   },
   {
     name: "warning",
-    label: "Warning Yellow",
+    label: "警告イエロー",
     light: { r: 0.9, g: 0.7, b: 0.2, a: 1 },
     dark: { r: 1, g: 0.8, b: 0.3, a: 1 }
   },
   {
     name: "error",
-    label: "Error Red",
+    label: "エラーレッド",
     light: { r: 0.8, g: 0.2, b: 0.2, a: 1 },
     dark: { r: 0.9, g: 0.3, b: 0.3, a: 1 }
   }

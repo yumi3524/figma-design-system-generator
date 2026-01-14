@@ -1,142 +1,142 @@
 # Figma Design System Generator
 
-A configurable Figma plugin to automatically generate design system variables and text styles with Light/Dark mode support.
+設定可能なFigmaプラグイン - デザインシステムの変数とテキストスタイルをLight/Darkモード対応で自動生成
 
-## ✨ Features
+## ✨ 機能
 
-- 🎨 **Color Variables**: Automatically create primitive color variables with Light/Dark modes
-- 📐 **Spacing System**: 8px-based spacing scale
-- 📝 **Typography**: Font size variables
-- 🔘 **Border Radius**: Consistent corner radius values
-- 🎯 **Semantic Tokens**: Smart variables that reference primitives and adapt to Light/Dark modes
-- ✍️ **Text Styles**: Pre-configured text styles with proper typography hierarchy
+- 🎨 **カラー変数**: Light/Darkモード対応のプリミティブカラー変数を自動作成
+- 📐 **スペーシングシステム**: 8pxベースのスペーシングスケール
+- 📝 **タイポグラフィ**: フォントサイズ変数
+- 🔘 **角丸**: 一貫した角丸の値
+- 🎯 **セマンティックトークン**: プリミティブを参照し、Light/Darkモードに自動適応するスマート変数
+- ✍️ **テキストスタイル**: タイポグラフィ階層が設定済みのテキストスタイル
 
-## 🚀 Quick Start
+## 🚀 クイックスタート
 
-### 1. Install Dependencies
+### 1. 依存関係のインストール
 
 ```bash
 cd figma-design-system-generator
 npm install
 ```
 
-### 2. Customize Your Design System
+### 2. デザインシステムをカスタマイズ
 
-Edit the files in `src/constants/`:
+`src/constants/` 内のファイルを編集：
 
-- **`colors.ts`** - Define your color palette
-- **`spacing.ts`** - Set spacing values
-- **`typography.ts`** - Configure font sizes and border radius
-- **`text-styles.ts`** - Define text style hierarchy
+- **`colors.ts`** - カラーパレットを定義
+- **`spacing.ts`** - スペーシング値を設定
+- **`typography.ts`** - フォントサイズと角丸を設定
+- **`text-styles.ts`** - テキストスタイルの階層を定義
 
-### 3. Build
+### 3. ビルド
 
 ```bash
 npm run build
 ```
 
-### 4. Load in Figma
+### 4. Figmaで読み込み
 
-1. Open Figma Desktop App
-2. Go to **Plugins** → **Development** → **Import plugin from manifest**
-3. Select `manifest.json` from this directory
-4. Run the plugin: **Plugins** → **Development** → **Design System Generator**
+1. Figma デスクトップアプリを開く
+2. **Plugins** → **Development** → **Import plugin from manifest**
+3. このディレクトリの `manifest.json` を選択
+4. プラグインを実行: **Plugins** → **Development** → **Design System Generator**
 
-## 📝 Customization Guide
+## 📝 カスタマイズガイド
 
-### Colors
+### カラー
 
-Edit `src/constants/colors.ts`:
+`src/constants/colors.ts` を編集：
 
 ```typescript
 export const COLORS: ColorDefinition[] = [
   {
     name: "primary",
-    label: "Primary Blue",
+    label: "プライマリーブルー",
     light: { r: 0.2, g: 0.4, b: 0.8, a: 1 },
     dark: { r: 0.4, g: 0.6, b: 1, a: 1 }
   },
-  // Add more colors...
+  // さらに追加...
 ];
 ```
 
-**Note**: RGB values range from `0.0` to `1.0`
+**注意**: RGB値は `0.0` から `1.0` の範囲です
 
-### Text Styles
+### テキストスタイル
 
-Edit `src/constants/text-styles.ts`:
+`src/constants/text-styles.ts` を編集：
 
 ```typescript
 export const TEXT_STYLES: TextStyleDefinition[] = [
   {
     name: "Heading/H1",
-    fontFamily: "Inter",  // Change to your font
+    fontFamily: "Inter",  // お好みのフォントに変更
     fontStyle: "Bold",
     fontSize: 48,
     lineHeight: 56,
     letterSpacing: 0
   },
-  // Add more styles...
+  // さらに追加...
 ];
 ```
 
-### Spacing & Typography
+### スペーシング & タイポグラフィ
 
-- **Spacing**: Edit `src/constants/spacing.ts`
-- **Typography & Border Radius**: Edit `src/constants/typography.ts`
+- **スペーシング**: `src/constants/spacing.ts` を編集
+- **タイポグラフィ & 角丸**: `src/constants/typography.ts` を編集
 
-## 🎯 What Gets Created
+## 🎯 生成されるアセット
 
-When you run the plugin, it creates:
+プラグインを実行すると、以下が作成されます：
 
-| Category | Count | Description |
+| カテゴリ | 数量 | 説明 |
 |----------|-------|-------------|
-| **Variables** | 76 | Colors, spacing, typography, border radius |
-| **Text Styles** | 6 | Heading/H1-H3, Body/Base, Body/Small, Caption |
-| **Modes** | 2 | Light & Dark |
+| **Variables** | 76個 | カラー、スペーシング、タイポグラフィ、角丸 |
+| **Text Styles** | 6個 | Heading/H1-H3, Body/Base, Body/Small, Caption |
+| **Modes** | 2個 | Light & Dark |
 
-### Collections
+### コレクション
 
-1. **Primitives** - Base values for light and dark modes
-2. **Tokens** - Semantic tokens that reference primitives
+1. **Primitives** - Light/Darkモードの基本値
+2. **Tokens** - Primitivesを参照するセマンティックトークン
 
-## 🛠️ Development
+## 🛠️ 開発
 
-### Watch Mode
+### Watchモード
 
 ```bash
 npm run watch
 ```
 
-This will automatically rebuild on file changes.
+ファイル変更時に自動的に再ビルドされます。
 
-### Project Structure
+### プロジェクト構造
 
 ```
 figma-design-system-generator/
 ├── src/
-│   ├── constants/      # ← Edit these files
-│   ├── utils/          # Helper functions
-│   └── code.ts         # Main logic
+│   ├── constants/      # ← これらのファイルを編集
+│   ├── utils/          # ヘルパー関数
+│   └── code.ts         # メインロジック
 ├── manifest.json
 ├── package.json
 └── tsconfig.json
 ```
 
-## 📚 Requirements
+## 📚 必要要件
 
-- **Figma Desktop App** (Plugin API not available in browser)
-- **Node.js** 16.x or higher
-- **Fonts**: Make sure fonts specified in `text-styles.ts` are available in your Figma account
+- **Figma デスクトップアプリ**（ブラウザ版ではPlugin APIが利用できません）
+- **Node.js** 16.x 以上
+- **フォント**: `text-styles.ts` で指定したフォントがFigmaアカウントで利用可能である必要があります
 
-## 🤝 Contributing
+## 🤝 貢献
 
-Feel free to fork this project and customize it for your needs!
+このプロジェクトを自由にフォークしてカスタマイズしてください！
 
-## 📄 License
+## 📄 ライセンス
 
-MIT License - feel free to use this in your projects.
+MIT License - プロジェクトで自由に利用できます
 
-## 🙏 Credits
+## 🙏 クレジット
 
 Created by Yumiko Fujiwara

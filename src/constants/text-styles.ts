@@ -1,8 +1,8 @@
 /**
- * Text Style Definitions
+ * テキストスタイル定義
  * 
- * Customize font families, sizes, and line heights for your design system.
- * Make sure the specified fonts are available in your Figma account.
+ * デザインシステムに合わせてフォントファミリー、サイズ、行間をカスタマイズ。
+ * 指定したフォントがFigmaアカウントで利用可能であることを確認してください。
  */
 
 export interface TextStyleDefinition {
@@ -15,10 +15,10 @@ export interface TextStyleDefinition {
 }
 
 /**
- * Text Styles
+ * テキストスタイル
  * 
- * Default font: Inter (widely available on Figma)
- * Change to your preferred typeface
+ * デフォルトフォント: Inter（Figmaで広く利用可能）
+ * お好みのフォントに変更してください
  */
 export const TEXT_STYLES: TextStyleDefinition[] = [
   {
