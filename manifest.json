@@ -1,9 +1,11 @@
 {
-  "name": "Fujioka Shinkyuu Design System",
-  "id": "fujioka-shinkyuu-design-system",
+  "name": "Design System Generator",
+  "id": "design-system-generator",
   "api": "1.0.0",
   "main": "code.js",
   "capabilities": [],
   "enableProposedApi": false,
-  "editorType": ["figma"]
+  "editorType": [
+    "figma"
+  ]
 }
