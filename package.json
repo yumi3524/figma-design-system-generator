@@ -1,0 +1,21 @@
+{
+  "name": "fujioka-shinkyuu-design-system",
+  "version": "1.0.0",
+  "description": "Figma plugin for Fujioka Shinkyuu design system",
+  "scripts": {
+    "build": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015",
+    "watch": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015 --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.98.0",
+    "esbuild": "^0.24.2",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "figma",
+    "plugin",
+    "design-system"
+  ],
+  "author": "Fujioka Shinkyuu",
+  "license": "MIT"
+}
