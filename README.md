@@ -2,137 +2,242 @@
 
 設定可能なFigmaプラグイン - デザインシステムの変数とテキストスタイルをLight/Darkモード対応で自動生成
 
-## ✨ 機能
+---
 
-- 🎨 **カラー変数**: Light/Darkモード対応のプリミティブカラー変数を自動作成
-- 📐 **スペーシングシステム**: 8pxベースのスペーシングスケール
-- 📝 **タイポグラフィ**: フォントサイズ変数
-- 🔘 **角丸**: 一貫した角丸の値
-- 🎯 **セマンティックトークン**: プリミティブを参照し、Light/Darkモードに自動適応するスマート変数
-- ✍️ **テキストスタイル**: タイポグラフィ階層が設定済みのテキストスタイル
+## ■ 概要
 
-## 🚀 クイックスタート
+TypeScript定数ファイルからFigmaのデザインシステムを自動生成するプラグインです。カラー、スペーシング、タイポグラフィ、テキストスタイルをLight/Darkモード対応で一括作成し、視覚的なドキュメンテーションフレームも生成します。
 
-### 1. 依存関係のインストール
+---
+
+## ■ 主な機能
+
+### ⚫︎ カラーシステム
+- プリミティブカラー変数（Light/Dark別の基本カラー）
+- セマンティックトークン（モードに応じて自動切り替え）
+
+### ⚫︎ スペーシングシステム
+- 8pxベースのスペーシングスケール（xs〜6xl）
+
+### ⚫︎ タイポグラフィシステム
+- フォントサイズ変数（xs〜6xl）
+- 角丸変数（sm、md、lg、full）
+
+### ⚫︎ テキストスタイル
+- 見出し階層（H1〜H3）、本文スタイル（Base、Small）、キャプション
+
+### ⚫︎ ドキュメンテーション
+- カラー、スペーシング、タイポグラフィの視覚的サンプルフレームを自動生成
+
+---
+
+## ■ クイックスタート
+
+### ▼ 1. セットアップ
 
 ```bash
+git clone <repository-url>
 cd figma-design-system-generator
 npm install
 ```
 
-### 2. デザインシステムをカスタマイズ
+### ▼ 2. カスタマイズ（任意）
 
-`src/constants/` 内のファイルを編集：
+デザインシステムをカスタマイズする場合、`src/constants/` 内のファイルを編集してください。詳細は「カスタマイズガイド」セクションを参照。
 
-- **`colors.ts`** - カラーパレットを定義
-- **`spacing.ts`** - スペーシング値を設定
-- **`typography.ts`** - フォントサイズと角丸を設定
-- **`text-styles.ts`** - テキストスタイルの階層を定義
-
-### 3. ビルド
+### ▼ 3. ビルドと実行
 
 ```bash
+# ビルド
 npm run build
+
+# または開発中はwatchモード
+npm run watch
 ```
 
-### 4. Figmaで読み込み
+### ▼ 4. Figmaで読み込み
 
 1. Figma デスクトップアプリを開く
 2. **Plugins** → **Development** → **Import plugin from manifest**
-3. このディレクトリの `manifest.json` を選択
-4. プラグインを実行: **Plugins** → **Development** → **Design System Generator**
+3. `manifest.json` を選択
+4. **Plugins** → **Development** → **Design System Generator** を実行
 
-## 📝 カスタマイズガイド
+---
 
-### カラー
+## ■ カスタマイズガイド
 
-`src/constants/colors.ts` を編集：
+### ▼ 編集対象ファイル
+
+| ファイル | 内容 |
+|---------|------|
+| `src/constants/colors.ts` | カラーパレット（プリミティブとセマンティック） |
+| `src/constants/spacing.ts` | スペーシング値 |
+| `src/constants/typography.ts` | フォントサイズと角丸 |
+| `src/constants/text-styles.ts` | テキストスタイル階層 |
+
+### ▼ カラーの追加・変更
+
+`src/constants/colors.ts`:
 
 ```typescript
 export const COLORS: ColorDefinition[] = [
   {
-    name: "primary",
-    label: "プライマリーブルー",
-    light: { r: 0.2, g: 0.4, b: 0.8, a: 1 },
-    dark: { r: 0.4, g: 0.6, b: 1, a: 1 }
+    name: "primary",              // 変数名
+    japaneseName: "プライマリー",  // 日本語名（ログ用）
+    light: { r: 0.2, g: 0.4, b: 0.8, a: 1 },  // Lightモード
+    dark: { r: 0.4, g: 0.6, b: 1, a: 1 }      // Darkモード
   },
-  // さらに追加...
 ];
 ```
 
-**注意**: RGB値は `0.0` から `1.0` の範囲です
+**注意**: RGB値は `0.0`〜`1.0` の範囲で指定。
 
-### テキストスタイル
+### ▼ スペーシングの追加・変更
 
-`src/constants/text-styles.ts` を編集：
+`src/constants/spacing.ts`:
+
+```typescript
+export const SPACING: SpacingDefinition[] = [
+  { name: "xs", value: 4 },
+  { name: "sm", value: 8 },
+];
+```
+
+### ▼ テキストスタイルの追加・変更
+
+`src/constants/text-styles.ts`:
 
 ```typescript
 export const TEXT_STYLES: TextStyleDefinition[] = [
   {
     name: "Heading/H1",
-    fontFamily: "Inter",  // お好みのフォントに変更
+    fontFamily: "Inter",
     fontStyle: "Bold",
     fontSize: 48,
     lineHeight: 56,
     letterSpacing: 0
   },
-  // さらに追加...
 ];
 ```
 
-### スペーシング & タイポグラフィ
+### ▼ タイポグラフィと角丸の変更
 
-- **スペーシング**: `src/constants/spacing.ts` を編集
-- **タイポグラフィ & 角丸**: `src/constants/typography.ts` を編集
+`src/constants/typography.ts`:
 
-## 🎯 生成されるアセット
+```typescript
+export const TYPOGRAPHY: TypographyDefinition[] = [
+  { name: "xs", value: 12 },
+];
 
-プラグインを実行すると、以下が作成されます：
+export const BORDER_RADIUS: BorderRadiusDefinition[] = [
+  { name: "sm", value: 4 },
+];
+```
 
-| カテゴリ | 数量 | 説明 |
-|----------|-------|-------------|
-| **Variables** | 76個 | カラー、スペーシング、タイポグラフィ、角丸 |
-| **Text Styles** | 6個 | Heading/H1-H3, Body/Base, Body/Small, Caption |
-| **Modes** | 2個 | Light & Dark |
+---
 
-### コレクション
+## ■ 生成されるアセット
 
-1. **Primitives** - Light/Darkモードの基本値
-2. **Tokens** - Primitivesを参照するセマンティックトークン
+### ▼ 変数コレクション
 
-## 🛠️ 開発
+| コレクション | 内容 |
+|------------|------|
+| **Primitives** | プリミティブカラー（Light/Dark別）、スペーシング、タイポグラフィ、角丸 |
+| **Tokens** | セマンティックカラートークン（Light/Darkモード対応） |
 
-### Watchモード
+### ▼ 変数の内訳
+
+- カラー変数: プリミティブ（Light/Dark別）+ セマンティックトークン
+- スペーシング変数: 8個（xs〜6xl）
+- タイポグラフィ変数: 8個（xs〜6xl）
+- 角丸変数: 4個（sm、md、lg、full）
+
+### ▼ テキストスタイル
+
+Heading/H1〜H3、Body/Base、Body/Small、Caption
+
+### ▼ モード
+
+**Light** / **Dark**
+
+### ▼ ドキュメンテーションフレーム
+
+カラーパレット、スペーシングスケール、タイポグラフィサンプルを含む視覚的なドキュメンテーションフレームが現在のページに自動生成されます。
+
+---
+
+## ■ プロジェクト構造
+
+```
+figma-design-system-generator/
+├── src/
+│   ├── constants/          ← カスタマイズ対象
+│   │   ├── colors.ts
+│   │   ├── spacing.ts
+│   │   ├── typography.ts
+│   │   └── text-styles.ts
+│   ├── generators/
+│   │   └── frame-generator.ts
+│   ├── utils/
+│   │   └── helpers.ts
+│   └── code.ts
+├── code.js
+├── manifest.json
+└── package.json
+```
+
+---
+
+## ■ 開発
+
+### ▼ Watchモード
 
 ```bash
 npm run watch
 ```
 
-ファイル変更時に自動的に再ビルドされます。
+ファイル変更時に自動再ビルド。Figmaでプラグインを再実行するだけで変更反映。
 
-### プロジェクト構造
+### ▼ 通常ビルド
 
-```
-figma-design-system-generator/
-├── src/
-│   ├── constants/      # ← これらのファイルを編集
-│   ├── utils/          # ヘルパー関数
-│   └── code.ts         # メインロジック
-├── manifest.json
-├── package.json
-└── tsconfig.json
+```bash
+npm run build
 ```
 
-## 📚 必要要件
+---
 
-- **Figma デスクトップアプリ**（ブラウザ版ではPlugin APIが利用できません）
-- **Node.js** 16.x 以上
-- **フォント**: `text-styles.ts` で指定したフォントがFigmaアカウントで利用可能である必要があります
+## ■ 動作要件
 
-## 📄 ライセンス
+- Figma デスクトップアプリ（ブラウザ版ではPlugin API利用不可）
+- Node.js 16.x 以上
+- テキストスタイルで指定したフォントがFigmaアカウントで利用可能であること
 
-MIT License - プロジェクトで自由に利用できます
+---
 
-## 🙏 クレジット
+## ■ トラブルシューティング
+
+### ▼ フォントが読み込めない
+
+```
+Warning: Could not load font for...
+```
+
+**解決方法**:
+- Figmaアカウントで該当フォントが利用可能か確認
+- `text-styles.ts` のフォント名を修正
+
+### ▼ 変数が重複している
+
+既存の同名変数がある場合、プラグインは既存変数を使用します。完全に再作成する場合は、変数コレクションを削除してから実行してください。
+
+---
+
+## ■ ライセンス
+
+MIT License
+
+---
+
+## ■ クレジット
 
 Created by Yumiko Fujiwara
