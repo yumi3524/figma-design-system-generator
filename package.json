@@ -4,8 +4,8 @@
   "description": "Configurable Figma plugin for design system generation",
   "main": "code.js",
   "scripts": {
-    "build": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015",
-    "watch": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015 --watch"
+    "build": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015 --loader:.html=text",
+    "watch": "esbuild src/code.ts --bundle --outfile=code.js --platform=node --target=es2015 --loader:.html=text --watch"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.98.0",

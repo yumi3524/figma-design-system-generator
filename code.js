@@ -26,102 +26,118 @@ var COLORS = [
     name: "primary",
     label: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC\u30D6\u30EB\u30FC",
     light: { r: 0.2, g: 0.4, b: 0.8, a: 1 },
-    dark: { r: 0.4, g: 0.6, b: 1, a: 1 }
+    dark: { r: 0.4, g: 0.6, b: 1, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "primary-light",
     label: "\u30E9\u30A4\u30C8\u30D6\u30EB\u30FC",
     light: { r: 0.4, g: 0.6, b: 0.9, a: 1 },
-    dark: { r: 0.5, g: 0.7, b: 1, a: 1 }
+    dark: { r: 0.5, g: 0.7, b: 1, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "primary-dark",
     label: "\u30C0\u30FC\u30AF\u30D6\u30EB\u30FC",
     light: { r: 0.1, g: 0.2, b: 0.6, a: 1 },
-    dark: { r: 0.3, g: 0.5, b: 0.9, a: 1 }
+    dark: { r: 0.3, g: 0.5, b: 0.9, a: 1 },
+    japaneseName: void 0
   },
   // アクセントカラー
   {
     name: "accent",
     label: "\u30A2\u30AF\u30BB\u30F3\u30C8\u30AA\u30EC\u30F3\u30B8",
     light: { r: 0.9, g: 0.5, b: 0.2, a: 1 },
-    dark: { r: 1, g: 0.6, b: 0.3, a: 1 }
+    dark: { r: 1, g: 0.6, b: 0.3, a: 1 },
+    japaneseName: void 0
   },
   // 背景カラー
   {
     name: "bg-primary",
     label: "\u80CC\u666F\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC",
     light: { r: 1, g: 1, b: 1, a: 1 },
-    dark: { r: 0.1, g: 0.1, b: 0.1, a: 1 }
+    dark: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "bg-surface",
     label: "\u30B5\u30FC\u30D5\u30A7\u30B9\u80CC\u666F",
     light: { r: 0.98, g: 0.98, b: 0.98, a: 1 },
-    dark: { r: 0.15, g: 0.15, b: 0.15, a: 1 }
+    dark: { r: 0.15, g: 0.15, b: 0.15, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "bg-elevated",
     label: "\u6D6E\u304D\u4E0A\u304C\u308A\u80CC\u666F",
     light: { r: 0.96, g: 0.96, b: 0.96, a: 1 },
-    dark: { r: 0.2, g: 0.2, b: 0.2, a: 1 }
+    dark: { r: 0.2, g: 0.2, b: 0.2, a: 1 },
+    japaneseName: void 0
   },
   // ボーダーカラー
   {
     name: "border-default",
     label: "\u30C7\u30D5\u30A9\u30EB\u30C8\u30DC\u30FC\u30C0\u30FC",
     light: { r: 0.9, g: 0.9, b: 0.9, a: 1 },
-    dark: { r: 0.25, g: 0.25, b: 0.25, a: 1 }
+    dark: { r: 0.25, g: 0.25, b: 0.25, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "border-subtle",
     label: "\u30B5\u30D6\u30C8\u30EB\u30DC\u30FC\u30C0\u30FC",
     light: { r: 0.93, g: 0.93, b: 0.93, a: 1 },
-    dark: { r: 0.18, g: 0.18, b: 0.18, a: 1 }
+    dark: { r: 0.18, g: 0.18, b: 0.18, a: 1 },
+    japaneseName: void 0
   },
   // テキストカラー
   {
     name: "text-primary",
     label: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC\u30C6\u30AD\u30B9\u30C8",
     light: { r: 0.15, g: 0.15, b: 0.15, a: 1 },
-    dark: { r: 0.95, g: 0.95, b: 0.95, a: 1 }
+    dark: { r: 0.95, g: 0.95, b: 0.95, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "text-secondary",
     label: "\u30BB\u30AB\u30F3\u30C0\u30EA\u30FC\u30C6\u30AD\u30B9\u30C8",
     light: { r: 0.45, g: 0.45, b: 0.45, a: 1 },
-    dark: { r: 0.7, g: 0.7, b: 0.7, a: 1 }
+    dark: { r: 0.7, g: 0.7, b: 0.7, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "text-muted",
     label: "\u30DF\u30E5\u30FC\u30C8\u30C6\u30AD\u30B9\u30C8",
     light: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
-    dark: { r: 0.5, g: 0.5, b: 0.5, a: 1 }
+    dark: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "text-on-accent",
     label: "\u30A2\u30AF\u30BB\u30F3\u30C8\u4E0A\u306E\u30C6\u30AD\u30B9\u30C8",
     light: { r: 1, g: 1, b: 1, a: 1 },
-    dark: { r: 1, g: 1, b: 1, a: 1 }
+    dark: { r: 1, g: 1, b: 1, a: 1 },
+    japaneseName: void 0
   },
   // セマンティックカラー
   {
     name: "success",
     label: "\u6210\u529F\u30B0\u30EA\u30FC\u30F3",
     light: { r: 0.2, g: 0.6, b: 0.3, a: 1 },
-    dark: { r: 0.3, g: 0.7, b: 0.4, a: 1 }
+    dark: { r: 0.3, g: 0.7, b: 0.4, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "warning",
     label: "\u8B66\u544A\u30A4\u30A8\u30ED\u30FC",
     light: { r: 0.9, g: 0.7, b: 0.2, a: 1 },
-    dark: { r: 1, g: 0.8, b: 0.3, a: 1 }
+    dark: { r: 1, g: 0.8, b: 0.3, a: 1 },
+    japaneseName: void 0
   },
   {
     name: "error",
     label: "\u30A8\u30E9\u30FC\u30EC\u30C3\u30C9",
     light: { r: 0.8, g: 0.2, b: 0.2, a: 1 },
-    dark: { r: 0.9, g: 0.3, b: 0.3, a: 1 }
+    dark: { r: 0.9, g: 0.3, b: 0.3, a: 1 },
+    japaneseName: void 0
   }
 ];
 
@@ -480,7 +496,7 @@ function createTypographyRow(style) {
       yield figma.loadFontAsync({ family: style.fontFamily, style: style.fontStyle });
       var sample = figma.createText();
       sample.name = "Sample";
-      sample.characters = "\u5FC3\u3068\u8EAB\u4F53\u3092\u3001\u3084\u3055\u3057\u304F\u307B\u3069\u304F\u3002 ABC 123";
+      sample.characters = "\u30C7\u30B6\u30A4\u30F3\u30B7\u30B9\u30C6\u30E0\u306E\u30B5\u30F3\u30D7\u30EB\u30C6\u30AD\u30B9\u30C8 ABC 123";
       sample.fontName = { family: style.fontFamily, style: style.fontStyle };
       sample.fontSize = style.fontSize;
       sample.lineHeight = { value: style.lineHeight, unit: "PIXELS" };
@@ -735,13 +751,276 @@ function createDesignSystemDocumentation() {
   });
 }
 
+// ui.html
+var ui_default = `<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>\u78BA\u8A8D\u30C0\u30A4\u30A2\u30ED\u30B0</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 16px;
+      background: #ffffff;
+      color: #000000;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 100%;
+    }
+
+    h1 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #000000;
+    }
+
+    .message {
+      margin-bottom: 16px;
+      font-size: 11px;
+      color: #333333;
+    }
+
+    .existing-items {
+      background: #f5f5f5;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .existing-items h2 {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #000000;
+    }
+
+    .existing-items ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .existing-items li {
+      padding: 4px 0;
+      color: #333333;
+    }
+
+    .existing-items li::before {
+      content: '\u2022';
+      margin-right: 8px;
+      color: #666666;
+    }
+
+    .question {
+      font-weight: 600;
+      margin-bottom: 16px;
+      font-size: 11px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: 1px solid #d0d0d0;
+      background: #ffffff;
+      color: #000000;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    button:hover {
+      background: #f5f5f5;
+    }
+
+    button:active {
+      background: #e5e5e5;
+    }
+
+    button.primary {
+      background: #18a0fb;
+      color: #ffffff;
+      border-color: #18a0fb;
+    }
+
+    button.primary:hover {
+      background: #0d8ddd;
+      border-color: #0d8ddd;
+    }
+
+    button.primary:active {
+      background: #0073bd;
+      border-color: #0073bd;
+    }
+
+    button.destructive {
+      background: #f24822;
+      color: #ffffff;
+      border-color: #f24822;
+    }
+
+    button.destructive:hover {
+      background: #d93d1b;
+      border-color: #d93d1b;
+    }
+
+    button.destructive:active {
+      background: #c03315;
+      border-color: #c03315;
+    }
+
+    .warning {
+      font-size: 10px;
+      color: #f24822;
+      margin-top: -4px;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: #fff5f3;
+      border-radius: 4px;
+      border: 1px solid #fdd8d0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>\u65E2\u5B58\u306E\u30C7\u30B6\u30A4\u30F3\u30B7\u30B9\u30C6\u30E0\u304C\u898B\u3064\u304B\u308A\u307E\u3057\u305F</h1>
+
+    <div class="message">
+      \u4EE5\u4E0B\u306E\u30B3\u30EC\u30AF\u30B7\u30E7\u30F3\u307E\u305F\u306F\u30C6\u30AD\u30B9\u30C8\u30B9\u30BF\u30A4\u30EB\u304C\u3059\u3067\u306B\u5B58\u5728\u3057\u307E\u3059\uFF1A
+    </div>
+
+    <div class="existing-items" id="existing-items">
+      <h2>\u691C\u51FA\u3055\u308C\u305F\u9805\u76EE</h2>
+      <ul id="items-list">
+        <!-- JavaScript\u3067\u52D5\u7684\u306B\u633F\u5165 -->
+      </ul>
+    </div>
+
+    <div class="question">\u3069\u306E\u3088\u3046\u306B\u51E6\u7406\u3057\u307E\u3059\u304B\uFF1F</div>
+
+    <div class="button-group">
+      <button class="primary" id="reuse-btn">
+        \u65E2\u5B58\u3092\u518D\u5229\u7528
+      </button>
+
+      <button class="destructive" id="overwrite-btn">
+        \u4E0A\u66F8\u304D\u3057\u3066\u518D\u4F5C\u6210
+      </button>
+      <div class="warning" id="warning" style="display: none;">
+        \u26A0\uFE0F \u65E2\u5B58\u306E\u5909\u6570\u3068\u30C6\u30AD\u30B9\u30C8\u30B9\u30BF\u30A4\u30EB\u304C\u524A\u9664\u3055\u308C\u307E\u3059\u3002\u3053\u306E\u64CD\u4F5C\u306F\u5143\u306B\u623B\u305B\u307E\u305B\u3093\u3002
+      </div>
+
+      <button id="cancel-btn">
+        \u30AD\u30E3\u30F3\u30BB\u30EB
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Figma\u304B\u3089\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u53D7\u3051\u53D6\u308B
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === 'show-existing-items') {
+        const itemsList = document.getElementById('items-list');
+        itemsList.innerHTML = '';
+        msg.items.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          itemsList.appendChild(li);
+        });
+      }
+    };
+
+    // \u30DC\u30BF\u30F3\u30A4\u30D9\u30F3\u30C8
+    document.getElementById('reuse-btn').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'reuse' } }, '*');
+    };
+
+    document.getElementById('overwrite-btn').onclick = () => {
+      document.getElementById('warning').style.display = 'block';
+      setTimeout(() => {
+        if (confirm('\u672C\u5F53\u306B\u4E0A\u66F8\u304D\u3057\u307E\u3059\u304B\uFF1F\u3053\u306E\u64CD\u4F5C\u306F\u5143\u306B\u623B\u305B\u307E\u305B\u3093\u3002')) {
+          parent.postMessage({ pluginMessage: { type: 'overwrite' } }, '*');
+        } else {
+          document.getElementById('warning').style.display = 'none';
+        }
+      }, 100);
+    };
+
+    document.getElementById('cancel-btn').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    };
+  </script>
+</body>
+
+</html>`;
+
 // src/code.ts
-function main() {
+function checkExistingData() {
+  const existingItems = [];
+  const primitives = getExistingCollection("Primitives");
+  if (primitives) {
+    existingItems.push("Primitives \u30B3\u30EC\u30AF\u30B7\u30E7\u30F3");
+  }
+  const tokens = getExistingCollection("Tokens");
+  if (tokens) {
+    existingItems.push("Tokens \u30B3\u30EC\u30AF\u30B7\u30E7\u30F3");
+  }
+  const textStyles = figma.getLocalTextStyles();
+  const hasDesignSystemStyles = textStyles.some(
+    (s) => s.name.startsWith("Heading/") || s.name.startsWith("Body/") || s.name === "Caption"
+  );
+  if (hasDesignSystemStyles) {
+    existingItems.push("\u30C6\u30AD\u30B9\u30C8\u30B9\u30BF\u30A4\u30EB");
+  }
+  return existingItems;
+}
+function deleteExistingData() {
+  console.log("Deleting existing design system...");
+  const collections = figma.variables.getLocalVariableCollections();
+  collections.forEach((c) => {
+    if (c.name === "Primitives" || c.name === "Tokens") {
+      console.log(`   Removing collection: ${c.name}`);
+      c.remove();
+    }
+  });
+  const textStyles = figma.getLocalTextStyles();
+  textStyles.forEach((s) => {
+    if (s.name.startsWith("Heading/") || s.name.startsWith("Body/") || s.name === "Caption") {
+      console.log(`   Removing text style: ${s.name}`);
+      s.remove();
+    }
+  });
+  console.log("Existing data deleted.\n");
+}
+function proceedWithGeneration(overwrite) {
   return __async(this, null, function* () {
     console.log("========================================");
-    console.log("\u85E4\u5CA1\u937C\u7078\u6CBB\u7642\u9662 Design System Generator");
+    console.log("Design System Generator");
     console.log("========================================\n");
     try {
+      if (overwrite) {
+        deleteExistingData();
+      }
       console.log("1. Creating Primitives collection...");
       let primitivesCollection = getExistingCollection("Primitives");
       if (!primitivesCollection) {
@@ -886,6 +1165,13 @@ function main() {
         }
       }
       console.log("\n9. Creating design system documentation frames...");
+      try {
+        yield figma.loadFontAsync({ family: "Inter", style: "Regular" });
+        yield figma.loadFontAsync({ family: "Inter", style: "Bold" });
+        console.log("   Loaded required fonts (Inter Regular, Bold)");
+      } catch (fontError) {
+        console.log("   Warning: Could not preload fonts - " + fontError);
+      }
       var docFrame = yield createDesignSystemDocumentation();
       figma.currentPage.appendChild(docFrame);
       figma.viewport.scrollAndZoomIntoView([docFrame]);
@@ -906,6 +1192,31 @@ function main() {
     } catch (error) {
       console.error("Error:", error);
       figma.closePlugin(`Error: ${error}`);
+    }
+  });
+}
+function main() {
+  return __async(this, null, function* () {
+    const existingItems = checkExistingData();
+    if (existingItems.length > 0) {
+      figma.showUI(ui_default, { width: 400, height: 350 });
+      figma.ui.postMessage({
+        type: "show-existing-items",
+        items: existingItems
+      });
+      figma.ui.onmessage = (msg) => __async(null, null, function* () {
+        if (msg.type === "reuse") {
+          figma.ui.close();
+          yield proceedWithGeneration(false);
+        } else if (msg.type === "overwrite") {
+          figma.ui.close();
+          yield proceedWithGeneration(true);
+        } else if (msg.type === "cancel") {
+          figma.closePlugin("\u30AD\u30E3\u30F3\u30BB\u30EB\u3057\u307E\u3057\u305F");
+        }
+      });
+    } else {
+      yield proceedWithGeneration(false);
     }
   });
 }

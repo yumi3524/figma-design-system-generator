@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>確認ダイアログ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 16px;
+      background: #ffffff;
+      color: #000000;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 100%;
+    }
+
+    h1 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #000000;
+    }
+
+    .message {
+      margin-bottom: 16px;
+      font-size: 11px;
+      color: #333333;
+    }
+
+    .existing-items {
+      background: #f5f5f5;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .existing-items h2 {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #000000;
+    }
+
+    .existing-items ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .existing-items li {
+      padding: 4px 0;
+      color: #333333;
+    }
+
+    .existing-items li::before {
+      content: '•';
+      margin-right: 8px;
+      color: #666666;
+    }
+
+    .question {
+      font-weight: 600;
+      margin-bottom: 16px;
+      font-size: 11px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: 1px solid #d0d0d0;
+      background: #ffffff;
+      color: #000000;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    button:hover {
+      background: #f5f5f5;
+    }
+
+    button:active {
+      background: #e5e5e5;
+    }
+
+    button.primary {
+      background: #18a0fb;
+      color: #ffffff;
+      border-color: #18a0fb;
+    }
+
+    button.primary:hover {
+      background: #0d8ddd;
+      border-color: #0d8ddd;
+    }
+
+    button.primary:active {
+      background: #0073bd;
+      border-color: #0073bd;
+    }
+
+    button.destructive {
+      background: #f24822;
+      color: #ffffff;
+      border-color: #f24822;
+    }
+
+    button.destructive:hover {
+      background: #d93d1b;
+      border-color: #d93d1b;
+    }
+
+    button.destructive:active {
+      background: #c03315;
+      border-color: #c03315;
+    }
+
+    .warning {
+      font-size: 10px;
+      color: #f24822;
+      margin-top: -4px;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: #fff5f3;
+      border-radius: 4px;
+      border: 1px solid #fdd8d0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>既存のデザインシステムが見つかりました</h1>
+
+    <div class="message">
+      以下のコレクションまたはテキストスタイルがすでに存在します：
+    </div>
+
+    <div class="existing-items" id="existing-items">
+      <h2>検出された項目</h2>
+      <ul id="items-list">
+        <!-- JavaScriptで動的に挿入 -->
+      </ul>
+    </div>
+
+    <div class="question">どのように処理しますか？</div>
+
+    <div class="button-group">
+      <button class="primary" id="reuse-btn">
+        既存を再利用
+      </button>
+
+      <button class="destructive" id="overwrite-btn">
+        上書きして再作成
+      </button>
+      <div class="warning" id="warning" style="display: none;">
+        ⚠️ 既存の変数とテキストスタイルが削除されます。この操作は元に戻せません。
+      </div>
+
+      <button id="cancel-btn">
+        キャンセル
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Figmaからのメッセージを受け取る
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === 'show-existing-items') {
+        const itemsList = document.getElementById('items-list');
+        itemsList.innerHTML = '';
+        msg.items.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          itemsList.appendChild(li);
+        });
+      }
+    };
+
+    // ボタンイベント
+    document.getElementById('reuse-btn').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'reuse' } }, '*');
+    };
+
+    document.getElementById('overwrite-btn').onclick = () => {
+      document.getElementById('warning').style.display = 'block';
+      setTimeout(() => {
+        if (confirm('本当に上書きしますか？この操作は元に戻せません。')) {
+          parent.postMessage({ pluginMessage: { type: 'overwrite' } }, '*');
+        } else {
+          document.getElementById('warning').style.display = 'none';
+        }
+      }, 100);
+    };
+
+    document.getElementById('cancel-btn').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    };
+  </script>
+</body>
+
+</html>

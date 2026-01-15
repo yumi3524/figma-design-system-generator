@@ -444,10 +444,9 @@ async function createSpacingRow(spacing: { name: string; value: number }): Promi
 
 /**
  * テキストノードを作成するヘルパー
+ * 注: createDesignSystemDocumentation()で事前にフォントがロード済み
  */
 async function createText(content: string, fontSize: number, fontStyle: string): Promise<TextNode> {
-  await figma.loadFontAsync({ family: "Inter", style: fontStyle });
-
   var text = figma.createText();
   text.characters = content;
   text.fontName = { family: "Inter", style: fontStyle };
@@ -671,6 +670,12 @@ async function createShadowCard(shadow: {
  * すべてのフレームを含むメインフレームを生成
  */
 export async function createDesignSystemDocumentation(): Promise<FrameNode> {
+  // フレーム生成に必要なフォントを一度だけロード
+  await Promise.all([
+    figma.loadFontAsync({ family: "Inter", style: "Regular" }),
+    figma.loadFontAsync({ family: "Inter", style: "Bold" })
+  ]);
+
   var mainFrame = figma.createFrame();
   applyFrameDefaults(mainFrame, {
     name: "🎨 Design System",

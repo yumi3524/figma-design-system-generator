@@ -12,12 +12,83 @@ import { TEXT_STYLES } from './constants/text-styles';
 import { getExistingCollection, getExistingVariable, getExistingTextStyle } from './utils/helpers';
 import { createDesignSystemDocumentation } from './generators/frame-generator';
 
-async function main() {
+// UIのHTMLをインポート
+// @ts-ignore - esbuild will inline this
+import html from '../ui.html';
+
+/**
+ * 既存データのチェック
+ */
+function checkExistingData(): string[] {
+  const existingItems: string[] = [];
+  
+  const primitives = getExistingCollection("Primitives");
+  if (primitives) {
+    existingItems.push("Primitives コレクション");
+  }
+  
+  const tokens = getExistingCollection("Tokens");
+  if (tokens) {
+    existingItems.push("Tokens コレクション");
+  }
+  
+  const textStyles = figma.getLocalTextStyles();
+  const hasDesignSystemStyles = textStyles.some(s => 
+    s.name.startsWith("Heading/") || 
+    s.name.startsWith("Body/") || 
+    s.name === "Caption"
+  );
+  
+  if (hasDesignSystemStyles) {
+    existingItems.push("テキストスタイル");
+  }
+  
+  return existingItems;
+}
+
+/**
+ * 既存データを削除
+ */
+function deleteExistingData() {
+  console.log("Deleting existing design system...");
+  
+  // コレクションの削除
+  const collections = figma.variables.getLocalVariableCollections();
+  collections.forEach(c => {
+    if (c.name === "Primitives" || c.name === "Tokens") {
+      console.log(`   Removing collection: ${c.name}`);
+      c.remove();
+    }
+  });
+  
+  // テキストスタイルの削除
+  const textStyles = figma.getLocalTextStyles();
+  textStyles.forEach(s => {
+    if (s.name.startsWith("Heading/") || 
+        s.name.startsWith("Body/") || 
+        s.name === "Caption") {
+      console.log(`   Removing text style: ${s.name}`);
+      s.remove();
+    }
+  });
+  
+  console.log("Existing data deleted.\n");
+}
+
+/**
+ * デザインシステム生成処理
+ */
+async function proceedWithGeneration(overwrite: boolean) {
   console.log("========================================");
   console.log("Design System Generator");
   console.log("========================================\n");
 
   try {
+    // 上書きモードの場合、既存データを削除
+    if (overwrite) {
+      deleteExistingData();
+    }
+
     // ----------------------------------------
     // Step 1: Create Primitives Collection
     // ----------------------------------------
@@ -239,6 +310,41 @@ async function main() {
   } catch (error) {
     console.error("Error:", error);
     figma.closePlugin(`Error: ${error}`);
+  }
+}
+
+/**
+ * メインエントリーポイント
+ */
+async function main() {
+  // 既存データのチェック
+  const existingItems = checkExistingData();
+  
+  if (existingItems.length > 0) {
+    // 既存データがある場合、UIを表示
+    figma.showUI(html, { width: 400, height: 350 });
+    
+    // UIに既存項目を送信
+    figma.ui.postMessage({
+      type: 'show-existing-items',
+      items: existingItems
+    });
+    
+    // UIからのメッセージを待つ
+    figma.ui.onmessage = async (msg) => {
+      if (msg.type === 'reuse') {
+        figma.ui.close();
+        await proceedWithGeneration(false);
+      } else if (msg.type === 'overwrite') {
+        figma.ui.close();
+        await proceedWithGeneration(true);
+      } else if (msg.type === 'cancel') {
+        figma.closePlugin('キャンセルしました');
+      }
+    };
+  } else {
+    // 既存データなし → そのまま実行
+    await proceedWithGeneration(false);
   }
 }
 
