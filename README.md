@@ -237,14 +237,3 @@ Warning: Could not load font for...
 - 既存の変数コレクション（Primitives、Tokens）を削除
 - プラグインを再実行
 
----
-
-## ■ ライセンス
-
-MIT License
-
----
-
-## ■ クレジット
-
-Created by Yumiko Fujiwara

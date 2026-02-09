@@ -1,12 +1,11 @@
-/**
- * タイポグラフィ定義 - フォントサイズスケール
- * デザインシステムのタイポグラフィをカスタマイズ
- */
-
 import { NumberDefinition } from './spacing';
 
 /**
- * タイポグラフィスケール
+ * タイポグラフィスケール（フォントサイズ）
+ *
+ * 使い方:
+ * - name: Figma変数名（text-xs, text-sm など）
+ * - value: フォントサイズ（px）
  */
 export const TYPOGRAPHY: NumberDefinition[] = [
   { name: "text-xs", value: 12 },
@@ -22,6 +21,10 @@ export const TYPOGRAPHY: NumberDefinition[] = [
 
 /**
  * 角丸スケール
+ *
+ * 使い方:
+ * - name: Figma変数名（radius-sm, radius-md など）
+ * - value: 角丸サイズ（px）、fullは9999で完全な円
  */
 export const BORDER_RADIUS: NumberDefinition[] = [
   { name: "radius-none", value: 0 },

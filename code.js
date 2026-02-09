@@ -20,125 +20,38 @@ var __async = (__this, __arguments, generator) => {
 };
 
 // src/constants/colors.ts
+function hex(color) {
+  var c = color.replace("#", "");
+  return {
+    r: parseInt(c.substring(0, 2), 16) / 255,
+    g: parseInt(c.substring(2, 4), 16) / 255,
+    b: parseInt(c.substring(4, 6), 16) / 255,
+    a: 1
+  };
+}
 var COLORS = [
-  // プライマリーカラー
-  {
-    name: "primary",
-    label: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC\u30D6\u30EB\u30FC",
-    light: { r: 0.2, g: 0.4, b: 0.8, a: 1 },
-    dark: { r: 0.4, g: 0.6, b: 1, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "primary-light",
-    label: "\u30E9\u30A4\u30C8\u30D6\u30EB\u30FC",
-    light: { r: 0.4, g: 0.6, b: 0.9, a: 1 },
-    dark: { r: 0.5, g: 0.7, b: 1, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "primary-dark",
-    label: "\u30C0\u30FC\u30AF\u30D6\u30EB\u30FC",
-    light: { r: 0.1, g: 0.2, b: 0.6, a: 1 },
-    dark: { r: 0.3, g: 0.5, b: 0.9, a: 1 },
-    japaneseName: void 0
-  },
-  // アクセントカラー
-  {
-    name: "accent",
-    label: "\u30A2\u30AF\u30BB\u30F3\u30C8\u30AA\u30EC\u30F3\u30B8",
-    light: { r: 0.9, g: 0.5, b: 0.2, a: 1 },
-    dark: { r: 1, g: 0.6, b: 0.3, a: 1 },
-    japaneseName: void 0
-  },
-  // 背景カラー
-  {
-    name: "bg-primary",
-    label: "\u80CC\u666F\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC",
-    light: { r: 1, g: 1, b: 1, a: 1 },
-    dark: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "bg-surface",
-    label: "\u30B5\u30FC\u30D5\u30A7\u30B9\u80CC\u666F",
-    light: { r: 0.98, g: 0.98, b: 0.98, a: 1 },
-    dark: { r: 0.15, g: 0.15, b: 0.15, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "bg-elevated",
-    label: "\u6D6E\u304D\u4E0A\u304C\u308A\u80CC\u666F",
-    light: { r: 0.96, g: 0.96, b: 0.96, a: 1 },
-    dark: { r: 0.2, g: 0.2, b: 0.2, a: 1 },
-    japaneseName: void 0
-  },
-  // ボーダーカラー
-  {
-    name: "border-default",
-    label: "\u30C7\u30D5\u30A9\u30EB\u30C8\u30DC\u30FC\u30C0\u30FC",
-    light: { r: 0.9, g: 0.9, b: 0.9, a: 1 },
-    dark: { r: 0.25, g: 0.25, b: 0.25, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "border-subtle",
-    label: "\u30B5\u30D6\u30C8\u30EB\u30DC\u30FC\u30C0\u30FC",
-    light: { r: 0.93, g: 0.93, b: 0.93, a: 1 },
-    dark: { r: 0.18, g: 0.18, b: 0.18, a: 1 },
-    japaneseName: void 0
-  },
-  // テキストカラー
-  {
-    name: "text-primary",
-    label: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC\u30C6\u30AD\u30B9\u30C8",
-    light: { r: 0.15, g: 0.15, b: 0.15, a: 1 },
-    dark: { r: 0.95, g: 0.95, b: 0.95, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "text-secondary",
-    label: "\u30BB\u30AB\u30F3\u30C0\u30EA\u30FC\u30C6\u30AD\u30B9\u30C8",
-    light: { r: 0.45, g: 0.45, b: 0.45, a: 1 },
-    dark: { r: 0.7, g: 0.7, b: 0.7, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "text-muted",
-    label: "\u30DF\u30E5\u30FC\u30C8\u30C6\u30AD\u30B9\u30C8",
-    light: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
-    dark: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "text-on-accent",
-    label: "\u30A2\u30AF\u30BB\u30F3\u30C8\u4E0A\u306E\u30C6\u30AD\u30B9\u30C8",
-    light: { r: 1, g: 1, b: 1, a: 1 },
-    dark: { r: 1, g: 1, b: 1, a: 1 },
-    japaneseName: void 0
-  },
-  // セマンティックカラー
-  {
-    name: "success",
-    label: "\u6210\u529F\u30B0\u30EA\u30FC\u30F3",
-    light: { r: 0.2, g: 0.6, b: 0.3, a: 1 },
-    dark: { r: 0.3, g: 0.7, b: 0.4, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "warning",
-    label: "\u8B66\u544A\u30A4\u30A8\u30ED\u30FC",
-    light: { r: 0.9, g: 0.7, b: 0.2, a: 1 },
-    dark: { r: 1, g: 0.8, b: 0.3, a: 1 },
-    japaneseName: void 0
-  },
-  {
-    name: "error",
-    label: "\u30A8\u30E9\u30FC\u30EC\u30C3\u30C9",
-    light: { r: 0.8, g: 0.2, b: 0.2, a: 1 },
-    dark: { r: 0.9, g: 0.3, b: 0.3, a: 1 },
-    japaneseName: void 0
-  }
+  // Primary
+  { name: "primary", label: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC\u30D6\u30EB\u30FC", light: hex("#3366CC"), dark: hex("#6699FF") },
+  { name: "primary-light", label: "\u30E9\u30A4\u30C8\u30D6\u30EB\u30FC", light: hex("#6699E6"), dark: hex("#80B3FF") },
+  { name: "primary-dark", label: "\u30C0\u30FC\u30AF\u30D6\u30EB\u30FC", light: hex("#1A3399"), dark: hex("#4D80E6") },
+  // Accent
+  { name: "accent", label: "\u30A2\u30AF\u30BB\u30F3\u30C8\u30AA\u30EC\u30F3\u30B8", light: hex("#E68033"), dark: hex("#FF994D") },
+  // Background
+  { name: "bg-primary", label: "\u80CC\u666F\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC", light: hex("#FFFFFF"), dark: hex("#1A1A1A") },
+  { name: "bg-surface", label: "\u30B5\u30FC\u30D5\u30A7\u30B9\u80CC\u666F", light: hex("#FAFAFA"), dark: hex("#262626") },
+  { name: "bg-elevated", label: "\u6D6E\u304D\u4E0A\u304C\u308A\u80CC\u666F", light: hex("#F5F5F5"), dark: hex("#333333") },
+  // Border
+  { name: "border-default", label: "\u30C7\u30D5\u30A9\u30EB\u30C8\u30DC\u30FC\u30C0\u30FC", light: hex("#E6E6E6"), dark: hex("#404040") },
+  { name: "border-subtle", label: "\u30B5\u30D6\u30C8\u30EB\u30DC\u30FC\u30C0\u30FC", light: hex("#EDEDED"), dark: hex("#2E2E2E") },
+  // Text
+  { name: "text-primary", label: "\u30D7\u30E9\u30A4\u30DE\u30EA\u30FC\u30C6\u30AD\u30B9\u30C8", light: hex("#262626"), dark: hex("#F2F2F2") },
+  { name: "text-secondary", label: "\u30BB\u30AB\u30F3\u30C0\u30EA\u30FC\u30C6\u30AD\u30B9\u30C8", light: hex("#737373"), dark: hex("#B3B3B3") },
+  { name: "text-muted", label: "\u30DF\u30E5\u30FC\u30C8\u30C6\u30AD\u30B9\u30C8", light: hex("#999999"), dark: hex("#808080") },
+  { name: "text-on-accent", label: "\u30A2\u30AF\u30BB\u30F3\u30C8\u4E0A\u306E\u30C6\u30AD\u30B9\u30C8", light: hex("#FFFFFF"), dark: hex("#FFFFFF") },
+  // Semantic
+  { name: "success", label: "\u6210\u529F\u30B0\u30EA\u30FC\u30F3", light: hex("#33994D"), dark: hex("#4DB366") },
+  { name: "warning", label: "\u8B66\u544A\u30A4\u30A8\u30ED\u30FC", light: hex("#E6B333"), dark: hex("#FFCC4D") },
+  { name: "error", label: "\u30A8\u30E9\u30FC\u30EC\u30C3\u30C9", light: hex("#CC3333"), dark: hex("#E64D4D") }
 ];
 
 // src/constants/spacing.ts
@@ -178,54 +91,12 @@ var BORDER_RADIUS = [
 
 // src/constants/text-styles.ts
 var TEXT_STYLES = [
-  {
-    name: "Heading/H1",
-    fontFamily: "Inter",
-    fontStyle: "Bold",
-    fontSize: 48,
-    lineHeight: 56,
-    letterSpacing: 0
-  },
-  {
-    name: "Heading/H2",
-    fontFamily: "Inter",
-    fontStyle: "Bold",
-    fontSize: 36,
-    lineHeight: 44,
-    letterSpacing: 0
-  },
-  {
-    name: "Heading/H3",
-    fontFamily: "Inter",
-    fontStyle: "Bold",
-    fontSize: 24,
-    lineHeight: 32,
-    letterSpacing: 0
-  },
-  {
-    name: "Body/Base",
-    fontFamily: "Inter",
-    fontStyle: "Regular",
-    fontSize: 16,
-    lineHeight: 24,
-    letterSpacing: 0
-  },
-  {
-    name: "Body/Small",
-    fontFamily: "Inter",
-    fontStyle: "Regular",
-    fontSize: 14,
-    lineHeight: 20,
-    letterSpacing: 0
-  },
-  {
-    name: "Caption",
-    fontFamily: "Inter",
-    fontStyle: "Regular",
-    fontSize: 12,
-    lineHeight: 16,
-    letterSpacing: 0
-  }
+  { name: "Heading/H1", fontFamily: "Inter", fontStyle: "Bold", fontSize: 48, lineHeight: 56, letterSpacing: 0 },
+  { name: "Heading/H2", fontFamily: "Inter", fontStyle: "Bold", fontSize: 36, lineHeight: 44, letterSpacing: 0 },
+  { name: "Heading/H3", fontFamily: "Inter", fontStyle: "Bold", fontSize: 24, lineHeight: 32, letterSpacing: 0 },
+  { name: "Body/Base", fontFamily: "Inter", fontStyle: "Regular", fontSize: 16, lineHeight: 24, letterSpacing: 0 },
+  { name: "Body/Small", fontFamily: "Inter", fontStyle: "Regular", fontSize: 14, lineHeight: 20, letterSpacing: 0 },
+  { name: "Caption", fontFamily: "Inter", fontStyle: "Regular", fontSize: 12, lineHeight: 16, letterSpacing: 0 }
 ];
 
 // src/utils/helpers.ts
@@ -268,8 +139,8 @@ var COLORS_UI = {
 };
 function rgbToHex(r, g, b) {
   var toHex = function(value) {
-    var hex = Math.round(value * 255).toString(16);
-    return hex.length === 1 ? "0" + hex : hex;
+    var hex2 = Math.round(value * 255).toString(16);
+    return hex2.length === 1 ? "0" + hex2 : hex2;
   };
   return "#" + toHex(r) + toHex(g) + toHex(b);
 }
