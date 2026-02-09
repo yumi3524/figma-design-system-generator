@@ -1,17 +1,16 @@
 /**
- * スペーシング定義 - 8pxベーススケール
- * デザインシステムのスペーシング値をカスタマイズ
+ * 数値定義（スペーシング・タイポグラフィ・角丸で共用）
+ *
+ * 使い方:
+ * - name: Figma変数名
+ * - value: 数値（px）
  */
-
 export interface NumberDefinition {
   name: string;
   value: number;
 }
 
-/**
- * スペーシングスケール
- * 8pxを基準としたスケール
- */
+/** スペーシングスケール（4px刻み、8pxベース） */
 export const SPACING: NumberDefinition[] = [
   { name: "space-1", value: 4 },
   { name: "space-2", value: 8 },

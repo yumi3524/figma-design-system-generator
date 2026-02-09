@@ -1,16 +1,11 @@
 /// <reference types="@figma/plugin-typings" />
 
-/**
- * フレーム生成ユーティリティ
- * デザインシステムの視覚的なドキュメントを自動生成
- */
-
 import { COLORS, ColorDefinition } from '../constants/colors';
 import { TEXT_STYLES, TextStyleDefinition } from '../constants/text-styles';
 import { SPACING } from '../constants/spacing';
 import { getExistingVariable, getExistingCollection, getExistingTextStyle } from '../utils/helpers';
 
-// レイアウト定数
+/** レイアウト定数 */
 var LAYOUT = {
   SWATCH_SIZE: 80,
   SWATCH_GAP: 16,
@@ -20,7 +15,7 @@ var LAYOUT = {
   COLORS_PER_ROW: 5
 };
 
-// 共通カラー定数
+/** 共通UIカラー定数 */
 var COLORS_UI = {
   WHITE: { r: 1, g: 1, b: 1 },
   LIGHT_GRAY: { r: 0.97, g: 0.97, b: 0.97 },
@@ -31,9 +26,7 @@ var COLORS_UI = {
   ERROR: { r: 0.8, g: 0.2, b: 0.2 }
 };
 
-/**
- * RGB値をHEX文字列に変換
- */
+/** RGB値をHEX文字列に変換 */
 function rgbToHex(r: number, g: number, b: number): string {
   var toHex = function(value: number): string {
     var hex = Math.round(value * 255).toString(16);
@@ -42,9 +35,7 @@ function rgbToHex(r: number, g: number, b: number): string {
   return "#" + toHex(r) + toHex(g) + toHex(b);
 }
 
-/**
- * 色名からVariable IDを取得
- */
+/** 色名からVariable IDを取得 */
 function getColorVariableId(colorName: string): string | null {
   var tokensCollection = getExistingCollection("Tokens");
   if (!tokensCollection) return null;
@@ -53,9 +44,7 @@ function getColorVariableId(colorName: string): string | null {
   return variable ? variable.id : null;
 }
 
-/**
- * 色名からRGB値を取得（フォールバック付き）
- */
+/** 色名からRGB値を取得（フォールバック付き） */
 function getColorRgb(colorName: string, fallback: RGB): RGB {
   var colorDef = COLORS.find(function(c) { return c.name === colorName; });
   if (colorDef) {
@@ -64,9 +53,7 @@ function getColorRgb(colorName: string, fallback: RGB): RGB {
   return fallback;
 }
 
-/**
- * Variable参照付きSolidPaintを生成
- */
+/** Variable参照付きSolidPaintを生成 */
 function createBoundSolidPaint(colorName: string, fallbackColor: RGB): SolidPaint {
   var variableId = getColorVariableId(colorName);
   var rgb = getColorRgb(colorName, fallbackColor);
@@ -83,9 +70,7 @@ function createBoundSolidPaint(colorName: string, fallbackColor: RGB): SolidPain
   return { type: "SOLID", color: rgb };
 }
 
-/**
- * 共通フレーム設定を適用
- */
+/** 共通フレーム設定を適用 */
 function applyFrameDefaults(frame: FrameNode, options: {
   name: string;
   direction: "HORIZONTAL" | "VERTICAL";
@@ -113,9 +98,7 @@ function applyFrameDefaults(frame: FrameNode, options: {
   }
 }
 
-/**
- * カラーパレットフレームを生成（Primitives + Semantic Tokens）
- */
+/** カラーパレットフレームを生成（Primitives + Semantic Tokens） */
 export async function createColorPaletteFrame(): Promise<FrameNode> {
   var frame = figma.createFrame();
   applyFrameDefaults(frame, {
@@ -126,29 +109,23 @@ export async function createColorPaletteFrame(): Promise<FrameNode> {
     bgColor: COLORS_UI.WHITE
   });
 
-  // メインタイトル
   var title = await createText("Color System", 32, "Bold");
   frame.appendChild(title);
 
-  // 説明テキスト
   var description = await createText("2階層のカラーシステム: Primitives（材料）→ Semantic Tokens（使い方）", 14, "Regular");
   description.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
   frame.appendChild(description);
 
-  // Section 1: Primitives
   var primitivesSection = await createPrimitivesSection();
   frame.appendChild(primitivesSection);
 
-  // Section 2: Semantic Tokens
   var semanticSection = await createSemanticTokensSection();
   frame.appendChild(semanticSection);
 
   return frame;
 }
 
-/**
- * Primitivesセクション - Light/Dark両方を表示
- */
+/** Primitivesセクション - Light/Dark両方を表示 */
 async function createPrimitivesSection(): Promise<FrameNode> {
   var section = figma.createFrame();
   applyFrameDefaults(section, {
@@ -159,7 +136,6 @@ async function createPrimitivesSection(): Promise<FrameNode> {
     bgColor: COLORS_UI.LIGHT_GRAY
   });
 
-  // セクションタイトル
   var sectionTitle = await createText("📦 Primitives (材料)", 24, "Bold");
   section.appendChild(sectionTitle);
 
@@ -167,7 +143,6 @@ async function createPrimitivesSection(): Promise<FrameNode> {
   sectionDesc.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
   section.appendChild(sectionDesc);
 
-  // スウォッチコンテナ
   var swatchContainer = figma.createFrame();
   swatchContainer.name = "Primitive Swatches";
   swatchContainer.layoutMode = "VERTICAL";
@@ -185,9 +160,7 @@ async function createPrimitivesSection(): Promise<FrameNode> {
   return section;
 }
 
-/**
- * Primitive カラーペア（Light + Dark）を作成
- */
+/** Primitive カラーペア（Light + Dark）を作成 */
 async function createPrimitiveColorPair(color: ColorDefinition): Promise<FrameNode> {
   var pairFrame = figma.createFrame();
   applyFrameDefaults(pairFrame, {
@@ -196,20 +169,16 @@ async function createPrimitiveColorPair(color: ColorDefinition): Promise<FrameNo
     spacing: 16
   });
 
-  // Light版
   var lightSwatch = await createPrimitiveSwatch(color, "light", color.light);
   pairFrame.appendChild(lightSwatch);
 
-  // Dark版
   var darkSwatch = await createPrimitiveSwatch(color, "dark", color.dark);
   pairFrame.appendChild(darkSwatch);
 
   return pairFrame;
 }
 
-/**
- * 個別のPrimitiveスウォッチ（Light or Dark）
- */
+/** 個別のPrimitiveスウォッチ（Light or Dark） */
 async function createPrimitiveSwatch(
   color: ColorDefinition,
   mode: "light" | "dark",
@@ -222,7 +191,6 @@ async function createPrimitiveSwatch(
     spacing: 8
   });
 
-  // カラー表示
   var colorRect = figma.createRectangle();
   colorRect.name = "Color";
   colorRect.resize(LAYOUT.SWATCH_SIZE, LAYOUT.SWATCH_SIZE);
@@ -238,18 +206,15 @@ async function createPrimitiveSwatch(
   colorRect.strokeWeight = 1;
   swatch.appendChild(colorRect);
 
-  // 変数名
   var varName = await createText("color/" + color.name + "/" + mode, 11, "Bold");
   varName.resize(LAYOUT.SWATCH_SIZE, varName.height);
   swatch.appendChild(varName);
 
-  // モードラベル
   var modeLabel = await createText(mode === "light" ? "☀️ Light" : "🌙 Dark", 10, "Regular");
   modeLabel.resize(LAYOUT.SWATCH_SIZE, modeLabel.height);
   modeLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
   swatch.appendChild(modeLabel);
 
-  // HEX値
   var hexValue = rgbToHex(rgb.r, rgb.g, rgb.b);
   var hexLabel = await createText(hexValue.toUpperCase(), 10, "Regular");
   hexLabel.resize(LAYOUT.SWATCH_SIZE, hexLabel.height);
@@ -272,7 +237,6 @@ async function createSemanticTokensSection(): Promise<FrameNode> {
     bgColor: COLORS_UI.LIGHT_GRAY
   });
 
-  // セクションタイトル
   var sectionTitle = await createText("🏷️ Semantic Tokens (使い方)", 24, "Bold");
   section.appendChild(sectionTitle);
 
@@ -280,7 +244,6 @@ async function createSemanticTokensSection(): Promise<FrameNode> {
   sectionDesc.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
   section.appendChild(sectionDesc);
 
-  // トークンコンテナ
   var tokenContainer = figma.createFrame();
   tokenContainer.name = "Semantic Tokens";
   tokenContainer.layoutMode = "HORIZONTAL";
@@ -318,17 +281,14 @@ async function createSemanticTokenSwatch(color: ColorDefinition): Promise<FrameN
   });
   swatch.cornerRadius = 8;
 
-  // トークン名
   var tokenName = await createText("sys/" + color.name, 12, "Bold");
   swatch.appendChild(tokenName);
 
-  // カラープレビュー（Variable参照付き）
   var colorRect = figma.createRectangle();
   colorRect.name = "Color";
   colorRect.resize(LAYOUT.SWATCH_SIZE * 2 + 16, 60);
   colorRect.cornerRadius = 6;
 
-  // Variable参照を適用
   var variableId = getColorVariableId(color.name);
   if (variableId) {
     colorRect.fills = [{
@@ -352,7 +312,6 @@ async function createSemanticTokenSwatch(color: ColorDefinition): Promise<FrameN
   colorRect.strokeWeight = 1;
   swatch.appendChild(colorRect);
 
-  // 参照情報
   var refInfo = figma.createFrame();
   applyFrameDefaults(refInfo, {
     name: "References",
@@ -390,11 +349,9 @@ export async function createTypographyFrame(): Promise<FrameNode> {
     bgColor: COLORS_UI.WHITE
   });
 
-  // タイトル
   var title = await createText("Typography", 32, "Bold");
   frame.appendChild(title);
 
-  // 各テキストスタイルのサンプル
   for (var i = 0; i < TEXT_STYLES.length; i++) {
     var styleRow = await createTypographyRow(TEXT_STYLES[i]);
     frame.appendChild(styleRow);
@@ -403,10 +360,7 @@ export async function createTypographyFrame(): Promise<FrameNode> {
   return frame;
 }
 
-/**
- * タイポグラフィの行を作成
- * Text Style参照を適用してClaude MCPで読み取り可能にする
- */
+/** タイポグラフィの行を作成 */
 async function createTypographyRow(style: TextStyleDefinition): Promise<FrameNode> {
   var row = figma.createFrame();
   applyFrameDefaults(row, {
@@ -416,7 +370,6 @@ async function createTypographyRow(style: TextStyleDefinition): Promise<FrameNod
   });
   row.counterAxisAlignItems = "CENTER";
 
-  // スタイル情報
   var info = figma.createFrame();
   applyFrameDefaults(info, {
     name: "Info",
@@ -439,7 +392,6 @@ async function createTypographyRow(style: TextStyleDefinition): Promise<FrameNod
 
   row.appendChild(info);
 
-  // サンプルテキスト（Text Style参照を適用）
   try {
     await figma.loadFontAsync({ family: style.fontFamily, style: style.fontStyle });
 
@@ -451,7 +403,6 @@ async function createTypographyRow(style: TextStyleDefinition): Promise<FrameNod
     sample.lineHeight = { value: style.lineHeight, unit: "PIXELS" };
     sample.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_PRIMARY }];
 
-    // Text Style参照を適用（Claude MCPで読み取り可能）
     var existingStyle = getExistingTextStyle(style.name);
     if (existingStyle) {
       sample.textStyleId = existingStyle.id;
@@ -480,11 +431,9 @@ export async function createSpacingFrame(): Promise<FrameNode> {
     bgColor: COLORS_UI.WHITE
   });
 
-  // タイトル
   var title = await createText("Spacing Scale", 32, "Bold");
   frame.appendChild(title);
 
-  // スペーシングのビジュアル
   for (var i = 0; i < SPACING.length; i++) {
     var spacingRow = await createSpacingRow(SPACING[i]);
     frame.appendChild(spacingRow);
@@ -504,10 +453,7 @@ function getSpacingVariableId(spacingName: string): string | null {
   return variable ? variable.id : null;
 }
 
-/**
- * スペーシングの行を作成
- * Variable参照を適用してClaude MCPで読み取り可能にする
- */
+/** スペーシングの行を作成 */
 async function createSpacingRow(spacing: { name: string; value: number }): Promise<FrameNode> {
   var row = figma.createFrame();
   applyFrameDefaults(row, {
@@ -517,19 +463,16 @@ async function createSpacingRow(spacing: { name: string; value: number }): Promi
   });
   row.counterAxisAlignItems = "CENTER";
 
-  // ラベル
   var label = await createText(spacing.name + " (" + spacing.value + "px)", 14, "Regular");
   label.resize(120, label.height);
   row.appendChild(label);
 
-  // ビジュアル表示（Variable参照を適用）
   var bar = figma.createRectangle();
   bar.name = "Bar";
   bar.resize(spacing.value, 24);
   bar.cornerRadius = 4;
   bar.fills = [{ type: "SOLID", color: COLORS_UI.PRIMARY }];
 
-  // Spacing Variableをバインド（Claude MCPで読み取り可能）
   var variableId = getSpacingVariableId(spacing.name);
   if (variableId) {
     var variable = await figma.variables.getVariableByIdAsync(variableId);
@@ -543,10 +486,7 @@ async function createSpacingRow(spacing: { name: string; value: number }): Promi
   return row;
 }
 
-/**
- * テキストノードを作成するヘルパー
- * 注: createDesignSystemDocumentation()で事前にフォントがロード済み
- */
+/** テキストノードを作成するヘルパー */
 async function createText(content: string, fontSize: number, fontStyle: string): Promise<TextNode> {
   var text = figma.createText();
   text.characters = content;
@@ -557,7 +497,7 @@ async function createText(content: string, fontSize: number, fontStyle: string):
   return text;
 }
 
-// ボタンバリエーション定義
+/** ボタンバリエーション定義 */
 var BUTTON_VARIANTS = [
   { type: "Primary", state: "Default", bgColor: "primary", textColor: "text-on-accent" },
   { type: "Primary", state: "Hover", bgColor: "primary-dark", textColor: "text-on-accent" },
@@ -567,10 +507,7 @@ var BUTTON_VARIANTS = [
   { type: "Ghost", state: "Default", bgColor: null, textColor: "primary" }
 ];
 
-/**
- * ボタンコンポーネントセットを生成
- * Variable参照を適用してClaude MCPで読み取り可能にする
- */
+/** ボタンコンポーネントセットを生成 */
 export async function createButtonsFrame(): Promise<FrameNode> {
   var frame = figma.createFrame();
   applyFrameDefaults(frame, {
@@ -581,11 +518,9 @@ export async function createButtonsFrame(): Promise<FrameNode> {
     bgColor: COLORS_UI.WHITE
   });
 
-  // タイトル
   var title = await createText("Buttons", 32, "Bold");
   frame.appendChild(title);
 
-  // ボタンコンテナ
   var buttonsContainer = figma.createFrame();
   applyFrameDefaults(buttonsContainer, {
     name: "Button Variants",
@@ -622,7 +557,6 @@ async function createButtonVariant(variant: {
     spacing: 8
   });
 
-  // ボタン本体
   var button = figma.createFrame();
   button.name = "Button";
   button.layoutMode = "HORIZONTAL";
@@ -635,34 +569,28 @@ async function createButtonVariant(variant: {
   button.cornerRadius = 8;
   button.itemSpacing = 8;
 
-  // 背景色にVariable参照を適用
   if (variant.bgColor) {
     button.fills = [createBoundSolidPaint(variant.bgColor, { r: 0.9, g: 0.9, b: 0.9 })];
   } else {
     button.fills = [];
   }
 
-  // ボーダーにVariable参照を適用
   if (variant.border) {
     button.strokes = [createBoundSolidPaint(variant.border, COLORS_UI.PRIMARY)];
     button.strokeWeight = 2;
   }
 
-  // ボタンテキスト
   await figma.loadFontAsync({ family: "Inter", style: "Bold" });
   var buttonText = figma.createText();
   buttonText.name = "Label";
   buttonText.characters = "ボタン";
   buttonText.fontName = { family: "Inter", style: "Bold" };
   buttonText.fontSize = 16;
-
-  // テキスト色にVariable参照を適用
   buttonText.fills = [createBoundSolidPaint(variant.textColor, COLORS_UI.WHITE)];
 
   button.appendChild(buttonText);
   container.appendChild(button);
 
-  // バリアント名ラベル
   var variantLabel = await createText(variant.type + " / " + variant.state, 12, "Regular");
   variantLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
   container.appendChild(variantLabel);
@@ -683,11 +611,9 @@ export async function createEffectsFrame(): Promise<FrameNode> {
     bgColor: COLORS_UI.WHITE
   });
 
-  // タイトル
   var title = await createText("Effects / Shadows", 32, "Bold");
   frame.appendChild(title);
 
-  // シャドウサンプルコンテナ
   var shadowContainer = figma.createFrame();
   applyFrameDefaults(shadowContainer, {
     name: "Shadow Samples",
@@ -695,7 +621,6 @@ export async function createEffectsFrame(): Promise<FrameNode> {
     spacing: 32
   });
 
-  // シャドウバリエーション
   var shadows = [
     { name: "Shadow / Small", blur: 4, y: 2, spread: 0, opacity: 0.1 },
     { name: "Shadow / Medium", blur: 8, y: 4, spread: 0, opacity: 0.15 },
@@ -730,7 +655,6 @@ async function createShadowCard(shadow: {
   });
   container.counterAxisAlignItems = "CENTER";
 
-  // カード（シャドウ適用）
   var card = figma.createRectangle();
   card.name = "Card";
   card.resize(120, 80);
@@ -746,7 +670,6 @@ async function createShadowCard(shadow: {
     blendMode: "NORMAL"
   }];
 
-  // Effect Styleを作成・適用（存在する場合）
   var effectStyles = await figma.getLocalEffectStylesAsync();
   var existingStyle = effectStyles.find(function(s) { return s.name === shadow.name; });
   if (existingStyle) {
@@ -755,11 +678,9 @@ async function createShadowCard(shadow: {
 
   container.appendChild(card);
 
-  // ラベル
   var label = await createText(shadow.name.replace("Shadow / ", ""), 14, "Bold");
   container.appendChild(label);
 
-  // スペック情報
   var spec = await createText("blur: " + shadow.blur + "px, y: " + shadow.y + "px", 10, "Regular");
   spec.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
   container.appendChild(spec);
@@ -771,7 +692,6 @@ async function createShadowCard(shadow: {
  * すべてのフレームを含むメインフレームを生成
  */
 export async function createDesignSystemDocumentation(): Promise<FrameNode> {
-  // フレーム生成に必要なフォントを一度だけロード
   await Promise.all([
     figma.loadFontAsync({ family: "Inter", style: "Regular" }),
     figma.loadFontAsync({ family: "Inter", style: "Bold" })
@@ -786,7 +706,6 @@ export async function createDesignSystemDocumentation(): Promise<FrameNode> {
     bgColor: COLORS_UI.LIGHT_GRAY
   });
 
-  // 各セクションを追加
   var colorFrame = await createColorPaletteFrame();
   mainFrame.appendChild(colorFrame);
 

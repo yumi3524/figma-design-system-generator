@@ -1,148 +1,58 @@
 /// <reference types="@figma/plugin-typings" />
 
-/**
- * カラー定義 - 汎用カラーパレット
- * 
- * デザインシステムに合わせてこのファイルをカスタマイズしてください。
- * 各カラーはLightモードとDarkモードの両方の値が必要です。
- */
+/** HEX文字列をFigma RGB形式に変換（#RRGGBB → {r, g, b, a}） */
+function hex(color: string): { r: number; g: number; b: number; a: number } {
+  var c = color.replace("#", "");
+  return {
+    r: parseInt(c.substring(0, 2), 16) / 255,
+    g: parseInt(c.substring(2, 4), 16) / 255,
+    b: parseInt(c.substring(4, 6), 16) / 255,
+    a: 1
+  };
+}
 
+/**
+ * カラー定義
+ *
+ * 使い方:
+ * - name: Figma変数名（英語、ハイフン区切り）
+ * - label: 日本語ラベル（ドキュメント用）
+ * - light/dark: hex("#RRGGBB") でHEX値を指定
+ */
 export interface ColorDefinition {
-  japaneseName: any;
   name: string;
-  label: string;  // 人間が読める形のラベル
+  label: string;
   light: { r: number; g: number; b: number; a: number };
   dark: { r: number; g: number; b: number; a: number };
 }
 
-/**
- * カラーパレット
- * 
- * ブランドカラーに合わせてこれらの値を編集してください。
- * RGB値は 0.0 から 1.0 の範囲です
- */
+/** カラーパレット */
 export const COLORS: ColorDefinition[] = [
-  // プライマリーカラー
-  {
-    name: "primary",
-    label: "プライマリーブルー",
-    light: { r: 0.2, g: 0.4, b: 0.8, a: 1 },
-    dark: { r: 0.4, g: 0.6, b: 1, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "primary-light",
-    label: "ライトブルー",
-    light: { r: 0.4, g: 0.6, b: 0.9, a: 1 },
-    dark: { r: 0.5, g: 0.7, b: 1, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "primary-dark",
-    label: "ダークブルー",
-    light: { r: 0.1, g: 0.2, b: 0.6, a: 1 },
-    dark: { r: 0.3, g: 0.5, b: 0.9, a: 1 },
-    japaneseName: undefined
-  },
+  // Primary
+  { name: "primary", label: "プライマリーブルー", light: hex("#3366CC"), dark: hex("#6699FF") },
+  { name: "primary-light", label: "ライトブルー", light: hex("#6699E6"), dark: hex("#80B3FF") },
+  { name: "primary-dark", label: "ダークブルー", light: hex("#1A3399"), dark: hex("#4D80E6") },
 
-  // アクセントカラー
-  {
-    name: "accent",
-    label: "アクセントオレンジ",
-    light: { r: 0.9, g: 0.5, b: 0.2, a: 1 },
-    dark: { r: 1, g: 0.6, b: 0.3, a: 1 },
-    japaneseName: undefined
-  },
+  // Accent
+  { name: "accent", label: "アクセントオレンジ", light: hex("#E68033"), dark: hex("#FF994D") },
 
-  // 背景カラー
-  {
-    name: "bg-primary",
-    label: "背景プライマリー",
-    light: { r: 1, g: 1, b: 1, a: 1 },
-    dark: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "bg-surface",
-    label: "サーフェス背景",
-    light: { r: 0.98, g: 0.98, b: 0.98, a: 1 },
-    dark: { r: 0.15, g: 0.15, b: 0.15, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "bg-elevated",
-    label: "浮き上がり背景",
-    light: { r: 0.96, g: 0.96, b: 0.96, a: 1 },
-    dark: { r: 0.2, g: 0.2, b: 0.2, a: 1 },
-    japaneseName: undefined
-  },
+  // Background
+  { name: "bg-primary", label: "背景プライマリー", light: hex("#FFFFFF"), dark: hex("#1A1A1A") },
+  { name: "bg-surface", label: "サーフェス背景", light: hex("#FAFAFA"), dark: hex("#262626") },
+  { name: "bg-elevated", label: "浮き上がり背景", light: hex("#F5F5F5"), dark: hex("#333333") },
 
-  // ボーダーカラー
-  {
-    name: "border-default",
-    label: "デフォルトボーダー",
-    light: { r: 0.9, g: 0.9, b: 0.9, a: 1 },
-    dark: { r: 0.25, g: 0.25, b: 0.25, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "border-subtle",
-    label: "サブトルボーダー",
-    light: { r: 0.93, g: 0.93, b: 0.93, a: 1 },
-    dark: { r: 0.18, g: 0.18, b: 0.18, a: 1 },
-    japaneseName: undefined
-  },
+  // Border
+  { name: "border-default", label: "デフォルトボーダー", light: hex("#E6E6E6"), dark: hex("#404040") },
+  { name: "border-subtle", label: "サブトルボーダー", light: hex("#EDEDED"), dark: hex("#2E2E2E") },
 
-  // テキストカラー
-  {
-    name: "text-primary",
-    label: "プライマリーテキスト",
-    light: { r: 0.15, g: 0.15, b: 0.15, a: 1 },
-    dark: { r: 0.95, g: 0.95, b: 0.95, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "text-secondary",
-    label: "セカンダリーテキスト",
-    light: { r: 0.45, g: 0.45, b: 0.45, a: 1 },
-    dark: { r: 0.7, g: 0.7, b: 0.7, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "text-muted",
-    label: "ミュートテキスト",
-    light: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
-    dark: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "text-on-accent",
-    label: "アクセント上のテキスト",
-    light: { r: 1, g: 1, b: 1, a: 1 },
-    dark: { r: 1, g: 1, b: 1, a: 1 },
-    japaneseName: undefined
-  },
+  // Text
+  { name: "text-primary", label: "プライマリーテキスト", light: hex("#262626"), dark: hex("#F2F2F2") },
+  { name: "text-secondary", label: "セカンダリーテキスト", light: hex("#737373"), dark: hex("#B3B3B3") },
+  { name: "text-muted", label: "ミュートテキスト", light: hex("#999999"), dark: hex("#808080") },
+  { name: "text-on-accent", label: "アクセント上のテキスト", light: hex("#FFFFFF"), dark: hex("#FFFFFF") },
 
-  // セマンティックカラー
-  {
-    name: "success",
-    label: "成功グリーン",
-    light: { r: 0.2, g: 0.6, b: 0.3, a: 1 },
-    dark: { r: 0.3, g: 0.7, b: 0.4, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "warning",
-    label: "警告イエロー",
-    light: { r: 0.9, g: 0.7, b: 0.2, a: 1 },
-    dark: { r: 1, g: 0.8, b: 0.3, a: 1 },
-    japaneseName: undefined
-  },
-  {
-    name: "error",
-    label: "エラーレッド",
-    light: { r: 0.8, g: 0.2, b: 0.2, a: 1 },
-    dark: { r: 0.9, g: 0.3, b: 0.3, a: 1 },
-    japaneseName: undefined
-  }
+  // Semantic
+  { name: "success", label: "成功グリーン", light: hex("#33994D"), dark: hex("#4DB366") },
+  { name: "warning", label: "警告イエロー", light: hex("#E6B333"), dark: hex("#FFCC4D") },
+  { name: "error", label: "エラーレッド", light: hex("#CC3333"), dark: hex("#E64D4D") },
 ];
