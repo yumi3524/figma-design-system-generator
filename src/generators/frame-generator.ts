@@ -114,99 +114,71 @@ function applyFrameDefaults(frame: FrameNode, options: {
 }
 
 /**
- * カラーパレットフレームを生成
+ * カラーパレットフレームを生成（Primitives + Semantic Tokens）
  */
 export async function createColorPaletteFrame(): Promise<FrameNode> {
   var frame = figma.createFrame();
   applyFrameDefaults(frame, {
-    name: "🎨 Color Palette",
+    name: "🎨 Color System",
     direction: "VERTICAL",
     spacing: LAYOUT.SECTION_GAP,
     padding: LAYOUT.PADDING,
     bgColor: COLORS_UI.WHITE
   });
 
-  // タイトル
-  var title = await createText("Color Palette", 32, "Bold");
+  // メインタイトル
+  var title = await createText("Color System", 32, "Bold");
   frame.appendChild(title);
 
-  // カラーをカテゴリ別にグループ化
-  var categories = groupColorsByCategory(COLORS);
+  // 説明テキスト
+  var description = await createText("2階層のカラーシステム: Primitives（材料）→ Semantic Tokens（使い方）", 14, "Regular");
+  description.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+  frame.appendChild(description);
 
-  for (var categoryName in categories) {
-    if (categories.hasOwnProperty(categoryName)) {
-      var categoryColors = categories[categoryName];
-      var section = await createColorSection(categoryName, categoryColors);
-      frame.appendChild(section);
-    }
-  }
+  // Section 1: Primitives
+  var primitivesSection = await createPrimitivesSection();
+  frame.appendChild(primitivesSection);
+
+  // Section 2: Semantic Tokens
+  var semanticSection = await createSemanticTokensSection();
+  frame.appendChild(semanticSection);
 
   return frame;
 }
 
 /**
- * カラーをカテゴリ別にグループ化
+ * Primitivesセクション - Light/Dark両方を表示
  */
-function groupColorsByCategory(colors: ColorDefinition[]): { [key: string]: ColorDefinition[] } {
-  var categories: { [key: string]: ColorDefinition[] } = {
-    "Primary": [],
-    "Background": [],
-    "Border": [],
-    "Text": [],
-    "Semantic": []
-  };
-
-  for (var i = 0; i < colors.length; i++) {
-    var color = colors[i];
-    if (color.name.indexOf("primary") === 0 || color.name === "accent") {
-      categories["Primary"].push(color);
-    } else if (color.name.indexOf("bg-") === 0) {
-      categories["Background"].push(color);
-    } else if (color.name.indexOf("border-") === 0) {
-      categories["Border"].push(color);
-    } else if (color.name.indexOf("text-") === 0) {
-      categories["Text"].push(color);
-    } else {
-      categories["Semantic"].push(color);
-    }
-  }
-
-  return categories;
-}
-
-/**
- * カラーセクションを作成
- */
-async function createColorSection(name: string, colors: ColorDefinition[]): Promise<FrameNode> {
+async function createPrimitivesSection(): Promise<FrameNode> {
   var section = figma.createFrame();
   applyFrameDefaults(section, {
-    name: name,
+    name: "Primitives",
     direction: "VERTICAL",
-    spacing: 16
+    spacing: 24,
+    padding: 24,
+    bgColor: COLORS_UI.LIGHT_GRAY
   });
 
   // セクションタイトル
-  var sectionTitle = await createText(name, 18, "Bold");
+  var sectionTitle = await createText("📦 Primitives (材料)", 24, "Bold");
   section.appendChild(sectionTitle);
 
-  // カラースウォッチのコンテナ
+  var sectionDesc = await createText("具体的な色の値を保存。Light版とDark版を個別に定義。", 12, "Regular");
+  sectionDesc.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+  section.appendChild(sectionDesc);
+
+  // スウォッチコンテナ
   var swatchContainer = figma.createFrame();
-  swatchContainer.name = "Swatches";
-  swatchContainer.layoutMode = "HORIZONTAL";
-  swatchContainer.layoutWrap = "WRAP";
-  swatchContainer.primaryAxisSizingMode = "FIXED";
+  swatchContainer.name = "Primitive Swatches";
+  swatchContainer.layoutMode = "VERTICAL";
+  swatchContainer.primaryAxisSizingMode = "AUTO";
   swatchContainer.counterAxisSizingMode = "AUTO";
-  swatchContainer.resize(
-    (LAYOUT.SWATCH_SIZE + LAYOUT.SWATCH_GAP) * LAYOUT.COLORS_PER_ROW - LAYOUT.SWATCH_GAP,
-    100
-  );
-  swatchContainer.itemSpacing = LAYOUT.SWATCH_GAP;
-  swatchContainer.counterAxisSpacing = LAYOUT.SWATCH_GAP;
+  swatchContainer.itemSpacing = 16;
   swatchContainer.fills = [];
 
-  for (var i = 0; i < colors.length; i++) {
-    var swatch = await createColorSwatch(colors[i]);
-    swatchContainer.appendChild(swatch);
+  for (var i = 0; i < COLORS.length; i++) {
+    var colorPair = await createPrimitiveColorPair(COLORS[i]);
+    swatchContainer.appendChild(colorPair);
   }
 
   section.appendChild(swatchContainer);
@@ -214,24 +186,149 @@ async function createColorSection(name: string, colors: ColorDefinition[]): Prom
 }
 
 /**
- * 個別のカラースウォッチを作成
- * Variable参照を適用してClaude MCPで読み取り可能にする
+ * Primitive カラーペア（Light + Dark）を作成
  */
-async function createColorSwatch(color: ColorDefinition): Promise<FrameNode> {
+async function createPrimitiveColorPair(color: ColorDefinition): Promise<FrameNode> {
+  var pairFrame = figma.createFrame();
+  applyFrameDefaults(pairFrame, {
+    name: "color/" + color.name,
+    direction: "HORIZONTAL",
+    spacing: 16
+  });
+
+  // Light版
+  var lightSwatch = await createPrimitiveSwatch(color, "light", color.light);
+  pairFrame.appendChild(lightSwatch);
+
+  // Dark版
+  var darkSwatch = await createPrimitiveSwatch(color, "dark", color.dark);
+  pairFrame.appendChild(darkSwatch);
+
+  return pairFrame;
+}
+
+/**
+ * 個別のPrimitiveスウォッチ（Light or Dark）
+ */
+async function createPrimitiveSwatch(
+  color: ColorDefinition,
+  mode: "light" | "dark",
+  rgb: { r: number; g: number; b: number; a: number }
+): Promise<FrameNode> {
   var swatch = figma.createFrame();
   applyFrameDefaults(swatch, {
-    name: color.name,
+    name: "color/" + color.name + "/" + mode,
     direction: "VERTICAL",
     spacing: 8
   });
 
-  // カラー表示用の四角形
+  // カラー表示
   var colorRect = figma.createRectangle();
   colorRect.name = "Color";
   colorRect.resize(LAYOUT.SWATCH_SIZE, LAYOUT.SWATCH_SIZE);
   colorRect.cornerRadius = 8;
+  colorRect.fills = [{
+    type: "SOLID",
+    color: { r: rgb.r, g: rgb.g, b: rgb.b }
+  }];
+  colorRect.strokes = [{
+    type: "SOLID",
+    color: COLORS_UI.BORDER
+  }];
+  colorRect.strokeWeight = 1;
+  swatch.appendChild(colorRect);
 
-  // Variable参照を適用（Claude MCPで読み取り可能）
+  // 変数名
+  var varName = await createText("color/" + color.name + "/" + mode, 11, "Bold");
+  varName.resize(LAYOUT.SWATCH_SIZE, varName.height);
+  swatch.appendChild(varName);
+
+  // モードラベル
+  var modeLabel = await createText(mode === "light" ? "☀️ Light" : "🌙 Dark", 10, "Regular");
+  modeLabel.resize(LAYOUT.SWATCH_SIZE, modeLabel.height);
+  modeLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+  swatch.appendChild(modeLabel);
+
+  // HEX値
+  var hexValue = rgbToHex(rgb.r, rgb.g, rgb.b);
+  var hexLabel = await createText(hexValue.toUpperCase(), 10, "Regular");
+  hexLabel.resize(LAYOUT.SWATCH_SIZE, hexLabel.height);
+  hexLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+  swatch.appendChild(hexLabel);
+
+  return swatch;
+}
+
+/**
+ * Semantic Tokensセクション
+ */
+async function createSemanticTokensSection(): Promise<FrameNode> {
+  var section = figma.createFrame();
+  applyFrameDefaults(section, {
+    name: "Semantic Tokens",
+    direction: "VERTICAL",
+    spacing: 24,
+    padding: 24,
+    bgColor: COLORS_UI.LIGHT_GRAY
+  });
+
+  // セクションタイトル
+  var sectionTitle = await createText("🏷️ Semantic Tokens (使い方)", 24, "Bold");
+  section.appendChild(sectionTitle);
+
+  var sectionDesc = await createText("実際のデザインで使用。モード切り替えで自動的に色が変わる。", 12, "Regular");
+  sectionDesc.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+  section.appendChild(sectionDesc);
+
+  // トークンコンテナ
+  var tokenContainer = figma.createFrame();
+  tokenContainer.name = "Semantic Tokens";
+  tokenContainer.layoutMode = "HORIZONTAL";
+  tokenContainer.layoutWrap = "WRAP";
+  tokenContainer.primaryAxisSizingMode = "FIXED";
+  tokenContainer.counterAxisSizingMode = "AUTO";
+  tokenContainer.resize(
+    (LAYOUT.SWATCH_SIZE * 2 + 32) * 3 + LAYOUT.SWATCH_GAP * 2,
+    100
+  );
+  tokenContainer.itemSpacing = LAYOUT.SWATCH_GAP;
+  tokenContainer.counterAxisSpacing = LAYOUT.SWATCH_GAP;
+  tokenContainer.fills = [];
+
+  for (var i = 0; i < COLORS.length; i++) {
+    var tokenSwatch = await createSemanticTokenSwatch(COLORS[i]);
+    tokenContainer.appendChild(tokenSwatch);
+  }
+
+  section.appendChild(tokenContainer);
+  return section;
+}
+
+/**
+ * 個別のSemantic Tokenスウォッチ
+ */
+async function createSemanticTokenSwatch(color: ColorDefinition): Promise<FrameNode> {
+  var swatch = figma.createFrame();
+  applyFrameDefaults(swatch, {
+    name: "sys/" + color.name,
+    direction: "VERTICAL",
+    spacing: 8,
+    padding: 12,
+    bgColor: COLORS_UI.WHITE
+  });
+  swatch.cornerRadius = 8;
+
+  // トークン名
+  var tokenName = await createText("sys/" + color.name, 12, "Bold");
+  swatch.appendChild(tokenName);
+
+  // カラープレビュー（Variable参照付き）
+  var colorRect = figma.createRectangle();
+  colorRect.name = "Color";
+  colorRect.resize(LAYOUT.SWATCH_SIZE * 2 + 16, 60);
+  colorRect.cornerRadius = 6;
+
+  // Variable参照を適用
   var variableId = getColorVariableId(color.name);
   if (variableId) {
     colorRect.fills = [{
@@ -255,23 +352,27 @@ async function createColorSwatch(color: ColorDefinition): Promise<FrameNode> {
   colorRect.strokeWeight = 1;
   swatch.appendChild(colorRect);
 
-  // カラー名ラベル
-  var nameLabel = await createText(color.name, 12, "Bold");
-  nameLabel.resize(LAYOUT.SWATCH_SIZE, nameLabel.height);
-  swatch.appendChild(nameLabel);
+  // 参照情報
+  var refInfo = figma.createFrame();
+  applyFrameDefaults(refInfo, {
+    name: "References",
+    direction: "VERTICAL",
+    spacing: 4
+  });
 
-  // 日本語ラベル
-  var jpLabel = await createText(color.label, 10, "Regular");
-  jpLabel.resize(LAYOUT.SWATCH_SIZE, jpLabel.height);
-  jpLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
-  swatch.appendChild(jpLabel);
+  var lightRef = await createText("→ color/" + color.name + "/light", 9, "Regular");
+  lightRef.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+  refInfo.appendChild(lightRef);
 
-  // HEX値表示
-  var hexValue = rgbToHex(color.light.r, color.light.g, color.light.b);
-  var hexLabel = await createText(hexValue.toUpperCase(), 10, "Regular");
-  hexLabel.resize(LAYOUT.SWATCH_SIZE, hexLabel.height);
-  hexLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
-  swatch.appendChild(hexLabel);
+  var darkRef = await createText("→ color/" + color.name + "/dark", 9, "Regular");
+  darkRef.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+  refInfo.appendChild(darkRef);
+
+  var autoSwitch = await createText("🔄 Auto-switching", 9, "Regular");
+  autoSwitch.fills = [{ type: "SOLID", color: COLORS_UI.PRIMARY }];
+  refInfo.appendChild(autoSwitch);
+
+  swatch.appendChild(refInfo);
 
   return swatch;
 }

@@ -324,85 +324,74 @@ function createColorPaletteFrame() {
   return __async(this, null, function* () {
     var frame = figma.createFrame();
     applyFrameDefaults(frame, {
-      name: "\u{1F3A8} Color Palette",
+      name: "\u{1F3A8} Color System",
       direction: "VERTICAL",
       spacing: LAYOUT.SECTION_GAP,
       padding: LAYOUT.PADDING,
       bgColor: COLORS_UI.WHITE
     });
-    var title = yield createText("Color Palette", 32, "Bold");
+    var title = yield createText("Color System", 32, "Bold");
     frame.appendChild(title);
-    var categories = groupColorsByCategory(COLORS);
-    for (var categoryName in categories) {
-      if (categories.hasOwnProperty(categoryName)) {
-        var categoryColors = categories[categoryName];
-        var section = yield createColorSection(categoryName, categoryColors);
-        frame.appendChild(section);
-      }
-    }
+    var description = yield createText("2\u968E\u5C64\u306E\u30AB\u30E9\u30FC\u30B7\u30B9\u30C6\u30E0: Primitives\uFF08\u6750\u6599\uFF09\u2192 Semantic Tokens\uFF08\u4F7F\u3044\u65B9\uFF09", 14, "Regular");
+    description.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+    frame.appendChild(description);
+    var primitivesSection = yield createPrimitivesSection();
+    frame.appendChild(primitivesSection);
+    var semanticSection = yield createSemanticTokensSection();
+    frame.appendChild(semanticSection);
     return frame;
   });
 }
-function groupColorsByCategory(colors) {
-  var categories = {
-    "Primary": [],
-    "Background": [],
-    "Border": [],
-    "Text": [],
-    "Semantic": []
-  };
-  for (var i = 0; i < colors.length; i++) {
-    var color = colors[i];
-    if (color.name.indexOf("primary") === 0 || color.name === "accent") {
-      categories["Primary"].push(color);
-    } else if (color.name.indexOf("bg-") === 0) {
-      categories["Background"].push(color);
-    } else if (color.name.indexOf("border-") === 0) {
-      categories["Border"].push(color);
-    } else if (color.name.indexOf("text-") === 0) {
-      categories["Text"].push(color);
-    } else {
-      categories["Semantic"].push(color);
-    }
-  }
-  return categories;
-}
-function createColorSection(name, colors) {
+function createPrimitivesSection() {
   return __async(this, null, function* () {
     var section = figma.createFrame();
     applyFrameDefaults(section, {
-      name,
+      name: "Primitives",
       direction: "VERTICAL",
-      spacing: 16
+      spacing: 24,
+      padding: 24,
+      bgColor: COLORS_UI.LIGHT_GRAY
     });
-    var sectionTitle = yield createText(name, 18, "Bold");
+    var sectionTitle = yield createText("\u{1F4E6} Primitives (\u6750\u6599)", 24, "Bold");
     section.appendChild(sectionTitle);
+    var sectionDesc = yield createText("\u5177\u4F53\u7684\u306A\u8272\u306E\u5024\u3092\u4FDD\u5B58\u3002Light\u7248\u3068Dark\u7248\u3092\u500B\u5225\u306B\u5B9A\u7FA9\u3002", 12, "Regular");
+    sectionDesc.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+    section.appendChild(sectionDesc);
     var swatchContainer = figma.createFrame();
-    swatchContainer.name = "Swatches";
-    swatchContainer.layoutMode = "HORIZONTAL";
-    swatchContainer.layoutWrap = "WRAP";
-    swatchContainer.primaryAxisSizingMode = "FIXED";
+    swatchContainer.name = "Primitive Swatches";
+    swatchContainer.layoutMode = "VERTICAL";
+    swatchContainer.primaryAxisSizingMode = "AUTO";
     swatchContainer.counterAxisSizingMode = "AUTO";
-    swatchContainer.resize(
-      (LAYOUT.SWATCH_SIZE + LAYOUT.SWATCH_GAP) * LAYOUT.COLORS_PER_ROW - LAYOUT.SWATCH_GAP,
-      100
-    );
-    swatchContainer.itemSpacing = LAYOUT.SWATCH_GAP;
-    swatchContainer.counterAxisSpacing = LAYOUT.SWATCH_GAP;
+    swatchContainer.itemSpacing = 16;
     swatchContainer.fills = [];
-    for (var i = 0; i < colors.length; i++) {
-      var swatch = yield createColorSwatch(colors[i]);
-      swatchContainer.appendChild(swatch);
+    for (var i = 0; i < COLORS.length; i++) {
+      var colorPair = yield createPrimitiveColorPair(COLORS[i]);
+      swatchContainer.appendChild(colorPair);
     }
     section.appendChild(swatchContainer);
     return section;
   });
 }
-function createColorSwatch(color) {
+function createPrimitiveColorPair(color) {
+  return __async(this, null, function* () {
+    var pairFrame = figma.createFrame();
+    applyFrameDefaults(pairFrame, {
+      name: "color/" + color.name,
+      direction: "HORIZONTAL",
+      spacing: 16
+    });
+    var lightSwatch = yield createPrimitiveSwatch(color, "light", color.light);
+    pairFrame.appendChild(lightSwatch);
+    var darkSwatch = yield createPrimitiveSwatch(color, "dark", color.dark);
+    pairFrame.appendChild(darkSwatch);
+    return pairFrame;
+  });
+}
+function createPrimitiveSwatch(color, mode, rgb) {
   return __async(this, null, function* () {
     var swatch = figma.createFrame();
     applyFrameDefaults(swatch, {
-      name: color.name,
+      name: "color/" + color.name + "/" + mode,
       direction: "VERTICAL",
       spacing: 8
     });
@@ -410,6 +399,84 @@ function createColorSwatch(color) {
     colorRect.name = "Color";
     colorRect.resize(LAYOUT.SWATCH_SIZE, LAYOUT.SWATCH_SIZE);
     colorRect.cornerRadius = 8;
+    colorRect.fills = [{
+      type: "SOLID",
+      color: { r: rgb.r, g: rgb.g, b: rgb.b }
+    }];
+    colorRect.strokes = [{
+      type: "SOLID",
+      color: COLORS_UI.BORDER
+    }];
+    colorRect.strokeWeight = 1;
+    swatch.appendChild(colorRect);
+    var varName = yield createText("color/" + color.name + "/" + mode, 11, "Bold");
+    varName.resize(LAYOUT.SWATCH_SIZE, varName.height);
+    swatch.appendChild(varName);
+    var modeLabel = yield createText(mode === "light" ? "\u2600\uFE0F Light" : "\u{1F319} Dark", 10, "Regular");
+    modeLabel.resize(LAYOUT.SWATCH_SIZE, modeLabel.height);
+    modeLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+    swatch.appendChild(modeLabel);
+    var hexValue = rgbToHex(rgb.r, rgb.g, rgb.b);
+    var hexLabel = yield createText(hexValue.toUpperCase(), 10, "Regular");
+    hexLabel.resize(LAYOUT.SWATCH_SIZE, hexLabel.height);
+    hexLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+    swatch.appendChild(hexLabel);
+    return swatch;
+  });
+}
+function createSemanticTokensSection() {
+  return __async(this, null, function* () {
+    var section = figma.createFrame();
+    applyFrameDefaults(section, {
+      name: "Semantic Tokens",
+      direction: "VERTICAL",
+      spacing: 24,
+      padding: 24,
+      bgColor: COLORS_UI.LIGHT_GRAY
+    });
+    var sectionTitle = yield createText("\u{1F3F7}\uFE0F Semantic Tokens (\u4F7F\u3044\u65B9)", 24, "Bold");
+    section.appendChild(sectionTitle);
+    var sectionDesc = yield createText("\u5B9F\u969B\u306E\u30C7\u30B6\u30A4\u30F3\u3067\u4F7F\u7528\u3002\u30E2\u30FC\u30C9\u5207\u308A\u66FF\u3048\u3067\u81EA\u52D5\u7684\u306B\u8272\u304C\u5909\u308F\u308B\u3002", 12, "Regular");
+    sectionDesc.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+    section.appendChild(sectionDesc);
+    var tokenContainer = figma.createFrame();
+    tokenContainer.name = "Semantic Tokens";
+    tokenContainer.layoutMode = "HORIZONTAL";
+    tokenContainer.layoutWrap = "WRAP";
+    tokenContainer.primaryAxisSizingMode = "FIXED";
+    tokenContainer.counterAxisSizingMode = "AUTO";
+    tokenContainer.resize(
+      (LAYOUT.SWATCH_SIZE * 2 + 32) * 3 + LAYOUT.SWATCH_GAP * 2,
+      100
+    );
+    tokenContainer.itemSpacing = LAYOUT.SWATCH_GAP;
+    tokenContainer.counterAxisSpacing = LAYOUT.SWATCH_GAP;
+    tokenContainer.fills = [];
+    for (var i = 0; i < COLORS.length; i++) {
+      var tokenSwatch = yield createSemanticTokenSwatch(COLORS[i]);
+      tokenContainer.appendChild(tokenSwatch);
+    }
+    section.appendChild(tokenContainer);
+    return section;
+  });
+}
+function createSemanticTokenSwatch(color) {
+  return __async(this, null, function* () {
+    var swatch = figma.createFrame();
+    applyFrameDefaults(swatch, {
+      name: "sys/" + color.name,
+      direction: "VERTICAL",
+      spacing: 8,
+      padding: 12,
+      bgColor: COLORS_UI.WHITE
+    });
+    swatch.cornerRadius = 8;
+    var tokenName = yield createText("sys/" + color.name, 12, "Bold");
+    swatch.appendChild(tokenName);
+    var colorRect = figma.createRectangle();
+    colorRect.name = "Color";
+    colorRect.resize(LAYOUT.SWATCH_SIZE * 2 + 16, 60);
+    colorRect.cornerRadius = 6;
     var variableId = getColorVariableId(color.name);
     if (variableId) {
       colorRect.fills = [{
@@ -431,18 +498,22 @@ function createColorSwatch(color) {
     }];
     colorRect.strokeWeight = 1;
     swatch.appendChild(colorRect);
-    var nameLabel = yield createText(color.name, 12, "Bold");
-    nameLabel.resize(LAYOUT.SWATCH_SIZE, nameLabel.height);
-    swatch.appendChild(nameLabel);
-    var jpLabel = yield createText(color.label, 10, "Regular");
-    jpLabel.resize(LAYOUT.SWATCH_SIZE, jpLabel.height);
-    jpLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
-    swatch.appendChild(jpLabel);
-    var hexValue = rgbToHex(color.light.r, color.light.g, color.light.b);
-    var hexLabel = yield createText(hexValue.toUpperCase(), 10, "Regular");
-    hexLabel.resize(LAYOUT.SWATCH_SIZE, hexLabel.height);
-    hexLabel.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
-    swatch.appendChild(hexLabel);
+    var refInfo = figma.createFrame();
+    applyFrameDefaults(refInfo, {
+      name: "References",
+      direction: "VERTICAL",
+      spacing: 4
+    });
+    var lightRef = yield createText("\u2192 color/" + color.name + "/light", 9, "Regular");
+    lightRef.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+    refInfo.appendChild(lightRef);
+    var darkRef = yield createText("\u2192 color/" + color.name + "/dark", 9, "Regular");
+    darkRef.fills = [{ type: "SOLID", color: COLORS_UI.TEXT_SECONDARY }];
+    refInfo.appendChild(darkRef);
+    var autoSwitch = yield createText("\u{1F504} Auto-switching", 9, "Regular");
+    autoSwitch.fills = [{ type: "SOLID", color: COLORS_UI.PRIMARY }];
+    refInfo.appendChild(autoSwitch);
+    swatch.appendChild(refInfo);
     return swatch;
   });
 }
@@ -569,7 +640,6 @@ function createSpacingRow(spacing) {
 }
 function createText(content, fontSize, fontStyle) {
   return __async(this, null, function* () {
-    yield figma.loadFontAsync({ family: "Inter", style: fontStyle });
     var text = figma.createText();
     text.characters = content;
     text.fontName = { family: "Inter", style: fontStyle };
@@ -729,6 +799,10 @@ function createShadowCard(shadow) {
 }
 function createDesignSystemDocumentation() {
   return __async(this, null, function* () {
+    yield Promise.all([
+      figma.loadFontAsync({ family: "Inter", style: "Regular" }),
+      figma.loadFontAsync({ family: "Inter", style: "Bold" })
+    ]);
     var mainFrame = figma.createFrame();
     applyFrameDefaults(mainFrame, {
       name: "\u{1F3A8} Design System",
@@ -1165,13 +1239,6 @@ function proceedWithGeneration(overwrite) {
         }
       }
       console.log("\n9. Creating design system documentation frames...");
-      try {
-        yield figma.loadFontAsync({ family: "Inter", style: "Regular" });
-        yield figma.loadFontAsync({ family: "Inter", style: "Bold" });
-        console.log("   Loaded required fonts (Inter Regular, Bold)");
-      } catch (fontError) {
-        console.log("   Warning: Could not preload fonts - " + fontError);
-      }
       var docFrame = yield createDesignSystemDocumentation();
       figma.currentPage.appendChild(docFrame);
       figma.viewport.scrollAndZoomIntoView([docFrame]);
